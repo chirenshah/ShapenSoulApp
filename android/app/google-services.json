@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "735561125897",
+    "firebase_url": "https://shapensoul-e1bb8.firebaseio.com",
+    "project_id": "shapensoul-e1bb8",
+    "storage_bucket": "shapensoul-e1bb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:735561125897:android:e6ff8830257c91600ae8d8",
+        "android_client_info": {
+          "package_name": "com.shapensoul.shapensoul"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "735561125897-0hbcmsm1fr7dmj4rgo1dmkkdqb7ft6m7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAa4Fj4t_vbDI5QusMq5XOmEGrtLIekCrs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "735561125897-0hbcmsm1fr7dmj4rgo1dmkkdqb7ft6m7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

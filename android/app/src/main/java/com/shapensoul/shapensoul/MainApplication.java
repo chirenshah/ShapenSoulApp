@@ -1,4 +1,4 @@
-package com.invertase.rnfirebasestarter;
+package com.shapensoul.shapensoul;
 
 import androidx.multidex.MultiDexApplication;
 

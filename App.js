@@ -1,101 +1,76 @@
-import React from 'react';
-import { StyleSheet, Platform, Image, Text, View, ScrollView } from 'react-native';
+import React, {Component} from "react";
+import { TextInput, View, ScrollView, TouchableOpacity } from "react-native";
+import stylesheet from 'react-native';
 
-import firebase from 'react-native-firebase';
+import {DefaultTheme, Provider as PaperProvider, Appbar,icon, IconButton} from 'react-native-paper';
+import { Drawer } from "react-native-paper";
+
+import Home from './components/Home.js';
+import Profile from './components/Profile.js';
+import Diet from './components/Diet.js';
+
+import { createAppContainer, SafeAreaView } from "react-navigation";
+import {createDrawerNavigator, DrawerActions} from 'react-navigation-drawer';
+
+import { createStackNavigator } from 'react-navigation-stack';
+
+
+
+const Menu = createDrawerNavigator(
+  {
+    Home: { screen: Home },
+    Diet: { screen: Diet },
+    Profile: { screen: Profile }
+  },
+  {
+    contentComponent: props => (
+      <ScrollView>
+        <SafeAreaView forceInset={{ top: "always", horizontal: "never" }}>
+          <Drawer.Section title = "Drawer">
+            <Drawer.Item
+              label="Home"
+              active="true"
+              onPress={() => props.navigation.navigate("Home")}
+            />
+            <Drawer.Item
+              label="Profile"
+              active="true"
+              onPress={() => props.navigation.navigate("Profile")}
+            />
+            <Drawer.Item
+              label="Diet"
+              active="true"
+              onPress={() => props.navigation.navigate("Diet")}
+            />
+          </Drawer.Section>
+        </SafeAreaView>
+      </ScrollView>
+    )
+  }
+);
+
+const AppNav = createAppContainer(Menu);
 
 export default class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {};
-  }
-
-  async componentDidMount() {
-    // TODO: You: Do firebase things
-    // const { user } = await firebase.auth().signInAnonymously();
-    // console.warn('User -> ', user.toJSON());
-
-    // await firebase.analytics().logEvent('foo', { bar: '123'});
-  }
-
   render() {
-    return (
-      <ScrollView>
-        <View style={styles.container}>
-          <Image source={require('./assets/ReactNativeFirebase.png')} style={[styles.logo]}/>
-          <Text style={styles.welcome}>
-            Welcome to {'\n'} React Native Firebase
-          </Text>
-          <Text style={styles.instructions}>
-            To get started, edit App.js
-          </Text>
-          {Platform.OS === 'ios' ? (
-            <Text style={styles.instructions}>
-              Press Cmd+R to reload,{'\n'}
-              Cmd+D or shake for dev menu
-            </Text>
-          ) : (
-            <Text style={styles.instructions}>
-              Double tap R on your keyboard to reload,{'\n'}
-              Cmd+M or shake for dev menu
-            </Text>
-          )}
-          <View style={styles.modules}>
-            <Text style={styles.modulesHeader}>The following Firebase modules are pre-installed:</Text>
-            {firebase.admob.nativeModuleExists && <Text style={styles.module}>admob()</Text>}
-            {firebase.analytics.nativeModuleExists && <Text style={styles.module}>analytics()</Text>}
-            {firebase.auth.nativeModuleExists && <Text style={styles.module}>auth()</Text>}
-            {firebase.config.nativeModuleExists && <Text style={styles.module}>config()</Text>}
-            {firebase.crashlytics.nativeModuleExists && <Text style={styles.module}>crashlytics()</Text>}
-            {firebase.database.nativeModuleExists && <Text style={styles.module}>database()</Text>}
-            {firebase.firestore.nativeModuleExists && <Text style={styles.module}>firestore()</Text>}
-            {firebase.functions.nativeModuleExists && <Text style={styles.module}>functions()</Text>}
-            {firebase.iid.nativeModuleExists && <Text style={styles.module}>iid()</Text>}
-            {firebase.links.nativeModuleExists && <Text style={styles.module}>links()</Text>}
-            {firebase.messaging.nativeModuleExists && <Text style={styles.module}>messaging()</Text>}
-            {firebase.notifications.nativeModuleExists && <Text style={styles.module}>notifications()</Text>}
-            {firebase.perf.nativeModuleExists && <Text style={styles.module}>perf()</Text>}
-            {firebase.storage.nativeModuleExists && <Text style={styles.module}>storage()</Text>}
-          </View>
-        </View>
-      </ScrollView>
-    );
+    return <AppNav />;
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  logo: {
-    height: 120,
-    marginBottom: 16,
-    marginTop: 64,
-    padding: 10,
-    width: 135,
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-  modules: {
-    margin: 20,
-  },
-  modulesHeader: {
-    fontSize: 16,
-    marginBottom: 8,
-  },
-  module: {
-    fontSize: 14,
-    marginTop: 4,
-    textAlign: 'center',
-  }
-});
+// const AppNavigator = createStackNavigator({
+//   Home: Home,
+//   Profile: Profile,
+// },
+// {
+//   initialRouteName: 'Home',
+// }
+// );
+
+
+// const AppContainer = createAppContainer(AppNavigator);
+
+// export default class App extends React.Component {
+//   render() {
+//     return <AppContainer />;
+//   }
+// }
