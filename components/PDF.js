@@ -7,7 +7,8 @@ import {
     Image,
     PermissionsAndroid,
     Platform,
-    Button
+    Button,
+    //Share
 } from 'react-native';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from 'react-native-share';
@@ -50,50 +51,17 @@ export default class PDF extends Component {
             this.createPDF();
         }
     }
-    onPressButton() {
-        Share.open({
-            title: "This is my report ",
-            message: "Message:",
-            url: "file:///storage/emulated/0/doc/test.pdf",
-            subject: "Report",
-        })
+    onPressButton = () => {
+        const url = "file://"+this.state.filePath
+        Share.open({url})
     }
 
-    onPressAButton() {
-        const url = "/storage/emulated/0/docs/test.pdf";
-        const title = 'Awesome Contents';
-        const message = 'Please check this out.';
-        const options = Platform.select({
-            ios: {
-                activityItemSources: [
-                    {
-                        placeholderItem: { type: 'url', content: url },
-                        item: {
-                            default: { type: 'url', content: url },
-                        },
-                        subject: {
-                            default: title,
-                        },
-                        linkMetadata: { originalUrl: url, url, title },
-                    },
-                    {
-                        placeholderItem: { type: 'text', content: message },
-                        item: {
-                            default: { type: 'text', content: message },
-                            message: null, // Specify no text to share via Messages app.
-                        },
-                    },
-                ],
-            },
-            default: {
-                title,
-                subject: title,
-                message: `${message} ${url}`,
-                url: 'file:///storage/emulated/0/doc/test.pdf'
-            },
-        });
-
-        Share.open(options);
+    onShare = async () => {
+        const result = await Share.open({
+            message:"hey",
+            url: this.state.filePath,
+            subject:"report"
+        })
     }
 
     async createPDF() {
@@ -115,16 +83,6 @@ export default class PDF extends Component {
             <View style={styles.MainContainer}>
                 <TouchableOpacity onPress={this.askPermission.bind(this)}>
                     <View>
-                        <Image
-                            //We are showing the Image from online
-                            source={{
-                                uri:
-                                    'https://raw.githubusercontent.com/AboutReact/sampleresource/master/pdf.png',
-                            }}
-                            //You can also show the image from you project directory like below
-                            //source={require('./Images/facebook.png')}
-                            style={styles.ImageStyle}
-                        />
                         <Text style={styles.text}>Create PDF</Text>
                     </View>
                 </TouchableOpacity>
