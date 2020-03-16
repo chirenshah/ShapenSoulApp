@@ -49,7 +49,7 @@ export function deleteFood(food, deleteComplete) {
         .catch((error) => console.log(error));
 }
 
-export async function getUsers(foodsRetreived) {
+export async function getUsers(UsersRetreived) {
 
     var foodList = [];
 
@@ -62,8 +62,7 @@ export async function getUsers(foodsRetreived) {
         foodItem.id = doc.id;
         foodList.push(foodItem);
     });
-
-    foodsRetreived(foodList);
+    UsersRetreived(foodList);
 }
 
 export function uploadFood(food, onFoodUploaded, { updating }) {
@@ -128,15 +127,14 @@ export function uploadFood(food, onFoodUploaded, { updating }) {
     }
 }
 
-export function addFood(food, addComplete) {
-    food.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+export function addUser(User, addComplete) {
 
     firebase.firestore()
-        .collection('Foods')
-        .add(food)
+        .collection('Users')
+        .add(User)
         .then((snapshot) => {
-            food.id = snapshot.id;
-            snapshot.set(food);
-        }).then(() => addComplete(food))
+            User.id = snapshot.id;
+            snapshot.set(User);
+        }).then(() => addComplete(User))
         .catch((error) => console.log(error));
 }
