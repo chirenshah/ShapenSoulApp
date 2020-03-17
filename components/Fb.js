@@ -64,6 +64,22 @@ export async function getUsers(UsersRetreived) {
     });
     UsersRetreived(foodList);
 }
+export async function getRecipe(UsersRetreived) {
+
+    var foodList = [];
+
+    var snapshot = await firebase.firestore()
+        .collection('Diet')
+        .get()
+
+    snapshot.forEach((doc) => {
+        const foodItem = doc.data();
+        foodItem.id = doc.id;
+        foodList.push(foodItem);
+    });
+    UsersRetreived(foodList);
+}
+
 
 export function uploadFood(food, onFoodUploaded, { updating }) {
 
