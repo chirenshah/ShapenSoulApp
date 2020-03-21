@@ -51,25 +51,25 @@ export function deleteFood(food, deleteComplete) {
 
 export async function getUsers(UsersRetreived) {
 
-    var foodList = [];
+    var userList = [];
 
     var snapshot = await firebase.firestore()
         .collection('Users')
         .get()
 
     snapshot.forEach((doc) => {
-        const foodItem = doc.data();
-        foodItem.id = doc.id;
-        foodList.push(foodItem);
+        const userItem = doc.data();
+        userItem.id = doc.id;
+        userList.push(userItem);
     });
-    UsersRetreived(foodList);
+    UsersRetreived(userList);
 }
 export async function getRecipe(UsersRetreived) {
 
     var foodList = [];
 
     var snapshot = await firebase.firestore()
-        .collection('Diet')
+        .collection('Recipe')
         .get()
 
     snapshot.forEach((doc) => {

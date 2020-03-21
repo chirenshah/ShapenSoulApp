@@ -7,6 +7,7 @@ import Signup from './screens/Signup'
 import AboutScreen from './screens/About'
 import LoginScreen from './screens/Login'
 import Diet from './screens/Diet'
+import User from './screens/UserDb'
 
 
 const Stack = createStackNavigator();
@@ -16,8 +17,8 @@ export default class App extends React.Component {
   home = () => {
     return(
       <Drawer.Navigator>
-          <Drawer.Screen name="Foo" component={Diet}/>
-          <Drawer.Screen name="Diet generator" component={LoginScreen}/> 
+          <Drawer.Screen name="Diet generator" component={Diet}/>
+          <Drawer.Screen name="User" component={User}/> 
       </Drawer.Navigator>
     )}
 
@@ -27,7 +28,9 @@ export default class App extends React.Component {
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={Signup} />
-        <Stack.Screen name="Home" children={this.home}/>
+      </Stack.Navigator>
+      <Stack.Navigator>
+      <Stack.Screen name="Home" children={this.home}/>
       </Stack.Navigator>
       </NavigationContainer>
     );
