@@ -27,6 +27,7 @@ export default class App extends Component {
 
     addComplete = (User) =>{
         console.log("Success")
+        this.props.navigation.navigate("Login")
     }
 
     createUser = () => {
@@ -37,7 +38,6 @@ export default class App extends Component {
             gender:this.state.gender,
         }
         addUser(User,this.addComplete)
-        this.props.navigation.navigate("Login")
     }
 
     componentDidMount(){

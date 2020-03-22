@@ -10,20 +10,26 @@ class App extends Component {
     this.state = {
       Users: [],
       query: '',
-    };
+      currentUser : {
+        currentName:''
+      }
+    }
+  };
+
+  userList = (userList) =>{
+    this.setState({
+      Users:userList
+    })
   }
 
-    userList = (userList) =>{
-        this.setState({
-            Users:userList
-        })
-    console.log(userList)
-  }
+  displayUser = (item)=> {
+    let Users = this.state.Users
+    return Users.filter(Users => Users.Name.search(item.Name) >= 0);  }
 
   componentDidMount() {
-     getUsers(this.userList)
+    getUsers(this.userList)
   }
-  findFilm(query) {
+  findUser(query) {
     if (query === '') {
       return [];
     }
@@ -37,9 +43,9 @@ class App extends Component {
  
   render() {
     const { query } = this.state;
-    const films = this.findFilm(query);
+    const Users = this.findUser(query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
- 
+    const test = this.displayUser(query)
     return (
       <View style={styles.container}>
         <Autocomplete
@@ -47,16 +53,19 @@ class App extends Component {
           autoCorrect={true}
           containerStyle={styles.autocompleteContainer}
           //data to show in suggestion
-          data={films.length === 1 && comp(query, films[0].Name) ? [] : films}
+          data={Users.length === 1 && comp(query, Users[0].Name) ? [] : Users}
           //default value if you want to set something in input
           defaultValue={query}
           /*onchange of the text changing the state of the query which will trigger
           the findFilm method to show the suggestions*/
           onChangeText={text => this.setState({ query: text })}
-          placeholder="Enter the film title"
+          placeholder="Enter the User Name"
           renderItem={({ item }) => (
             //you can change the view you want to show in suggestion from here
-            <TouchableOpacity onPress={() => this.setState({ query: item.title })}>
+            <TouchableOpacity onPress={() =>{
+              this.setState({ query: item.Name})
+              }
+            }>
               <Text style={styles.itemText}>
                 {item.Name} ({item.Contact})
               </Text>
@@ -64,10 +73,10 @@ class App extends Component {
           )}
         />
         <View style={styles.descriptionContainer}>
-          {films.length > 0 ? (
-            <Text style={styles.infoText}>{this.state.Name}{this.state.Phone}</Text>
+          {Users.length > 0 ? (
+            <Text style={styles.infoText}>{test[0].Name}</Text>
           ) : (
-            <Text style={styles.infoText}>Enter The Film Title</Text>
+            <Text style={styles.infoText}>Enter the User Name</Text>
           )}
         </View>
       </View>
