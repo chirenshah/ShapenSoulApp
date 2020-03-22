@@ -27,9 +27,9 @@ export default class PDF extends Component {
                 const granted = await PermissionsAndroid.request(
                     PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
                     {
-                        title: 'CameraExample App External Storage Write Permission',
+                        title: 'ShapenSoul App External Storage Write Permission',
                         message:
-                            'CameraExample App needs access to Storage data in your SD Card ',
+                            'ShapenSoul App needs access to Storage data in your SD Card ',
                     }
                 );
                 if (granted === PermissionsAndroid.RESULTS.GRANTED) {
@@ -68,7 +68,29 @@ export default class PDF extends Component {
         let options = {
             //Content to print
             html:
-                '<h1 style="text-align: center;"><strong>Hello Guys</strong></h1><p style="text-align: center;">Here is an example of pdf Print in React Native</p><p style="text-align: center;"><strong>Team About React</strong></p>',
+                `<head>
+                <title>Diet</title>
+                    <img src='https://en.wikipedia.org/wiki/React_Native#/media/File:React-icon.svg' alt='header' height='250' width='1300' >
+                </head>
+                <body>
+                <pre style='font-size: x-large;
+                            text-align: center;'>
+                    Sesame Ladoo:
+            
+                    Sesame seeds 150 gm
+                    Jaggery desi 75 gm
+            
+                    Method :
+                    Dry roast the sesame seeds, grind it in a coarse mixture.
+                    Add water in jaggery, make a jaggery syrup of one thread consistency.
+                    Mix the sesame seeds in the jaggery syrup.
+                    Make ladoos of medium size.
+                    
+                    Benefits :
+                    Seseame seeds are good source of calcium and phosphorous.
+                    Good for arthritis.</pre>
+                    <hr>
+                </body>"`,
             //File Name
             fileName: 'test',
             //File directory

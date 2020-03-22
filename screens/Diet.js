@@ -2,6 +2,10 @@ import React from 'react';
 import { SafeAreaView, View , StyleSheet, Text, Button , TouchableOpacity} from 'react-native';
 import {getRecipe} from '../components/Fb'
 import Autocomplete from 'react-native-autocomplete-input';
+import RNHTMLtoPDF from 'react-native-html-to-pdf';
+import Share from "react-native-share";
+import RNFetchBlob from 'rn-fetch-blob';
+
 
 export default class App extends React.Component {
   state = {
@@ -26,18 +30,48 @@ export default class App extends React.Component {
     this.state.selectedRecipe = selectedRecipe.concat(this.state.selectedRecipe);
   }
 
-  createPDf = () => {
+  sharePDFWithAndroid(fileUrl, type) {
+    RNFetchBlob.fs.readFile(fileUrl, 'base64')
+    .then(async (base64Data) => {
+    base64Data = `data:${type};base64,` + base64Data;
+    await Share.open({ 
+    filename:"ZGlldA==",
+    title: 'ShapenSoul',
+    message: 'Your Diet:',
+    url: base64Data });
+    // remove the image or pdf from device's storage
+    await RNFS.unlink(filePath); 
+})
+  }
+
+  create = async () => {
     const {selectedRecipe} = this.state
     let final = ""
     selectedRecipe.forEach((item)=>{
-    let html=`<head>${item.Name}</head>
-            <body>
+    let recipe=`<h1>${item.Name}</h1>
               <p>${item.Value}</p>
-              <p>${item.Value}</p>
-            </body>`;
-    final += html;
+              <p>${item.Value}</p>`;
+    final += recipe;
     })
-    console.log(final)
+    let html = `<head>Shape N Soul </head>
+                <body>${final}</body> `
+    let options = {
+                  html:html,
+                  fileName: 'test',
+                  directory: 'docs',
+              };
+    let file = await RNHTMLtoPDF.convert(options);
+    console.log(file.filePath)
+    this.sharePDFWithAndroid(file.filePath,"application/pdf");
+  }
+
+  removeItem = (info) =>{
+    let {Diet} = this.state;
+    let {selectedRecipe} = this.state;
+    let data = Diet.indexOf(info);
+    Diet = Diet.splice(data,1); 
+    selectedRecipe = selectedRecipe.splice(data,1)
+    this.forceUpdate();
   }
 
   componentDidMount(){
@@ -95,15 +129,12 @@ export default class App extends React.Component {
                 padding:20,
               marginTop:10}
               } 
-              onPress={()=>{Diet.pop();
-                this.state.selectedRecipe.pop();
-                this.forceUpdate();}}>
+              onPress={()=>{this.removeItem(info)}}>
                 <Text>{info}</Text>
               </TouchableOpacity>)}
               <View style={{marginTop:100}}>
                 <Button title="Create" onPress={() => {
-                  this.createPDf();
-                  console.log("hi")
+                  this.create();
                   }}/>
               </View>
             </View>
