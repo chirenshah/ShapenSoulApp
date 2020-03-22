@@ -74,7 +74,11 @@ class App extends Component {
         />
         <View style={styles.descriptionContainer}>
           {Users.length > 0 ? (
-            <Text style={styles.infoText}>{test[0].Name}</Text>
+            <View>
+              <Text style={styles.infoText}>{test[0].Name}</Text>
+              <Text style={styles.infoText}>{test[0].Contact}</Text>
+              <Text style={styles.infoText}>{test[0].BloodGroup}</Text>
+            </View>
           ) : (
             <Text style={styles.infoText}>Enter the User Name</Text>
           )}
