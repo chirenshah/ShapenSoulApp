@@ -64,7 +64,7 @@ export async function getUsers(UsersRetreived) {
     });
     UsersRetreived(userList);
 }
-export async function getRecipe(UsersRetreived) {
+export async function getRecipe(RecipeList) {
 
     var foodList = [];
 
@@ -77,7 +77,7 @@ export async function getRecipe(UsersRetreived) {
         foodItem.id = doc.id;
         foodList.push(foodItem);
     });
-    UsersRetreived(foodList);
+    RecipeList(foodList);
 }
 
 

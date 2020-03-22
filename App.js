@@ -28,9 +28,7 @@ export default class App extends React.Component {
       <Stack.Navigator>
         <Stack.Screen name="Login" component={LoginScreen} />
         <Stack.Screen name="Signup" component={Signup} />
-      </Stack.Navigator>
-      <Stack.Navigator>
-      <Stack.Screen name="Home" children={this.home}/>
+        <Stack.Screen name="Home" children={this.home}/>
       </Stack.Navigator>
       </NavigationContainer>
     );

@@ -6,18 +6,38 @@ import Autocomplete from 'react-native-autocomplete-input';
 export default class App extends React.Component {
   state = {
       recipe: [],
-      Name:'',
       id:'',
       query:'',
-      Diet:[]
+      Diet:[],
+      selectedRecipe:[]
   }
 
   RecipeList = (list) =>{
-    console.log(list)
     this.setState({
       recipe:list
     })
-  
+  }
+
+  makeDiet = (item) =>{
+    this.state.Diet.push(item.Name)
+    this.setState({ query: ""})
+    const { recipe } = this.state;
+    const selectedRecipe = recipe.filter(recipe => recipe.Name.search(item.Name) >= 0);
+    this.state.selectedRecipe = selectedRecipe.concat(this.state.selectedRecipe);
+  }
+
+  createPDf = () => {
+    const {selectedRecipe} = this.state
+    let final = ""
+    selectedRecipe.forEach((item)=>{
+    let html=`<head>${item.Name}</head>
+            <body>
+              <p>${item.Value}</p>
+              <p>${item.Value}</p>
+            </body>`;
+    final += html;
+    })
+    console.log(final)
   }
 
   componentDidMount(){
@@ -56,9 +76,7 @@ export default class App extends React.Component {
           renderItem={({ item }) => (
             //you can change the view you want to show in suggestion from here
             <TouchableOpacity onPress={() =>{
-              this.setState({ query: item.Name})
-              Diet.push(item.Name)
-              this.setState({ query: ""})
+              this.makeDiet(item)
               }
             }>
               <Text style={styles.itemText}>
@@ -71,11 +89,23 @@ export default class App extends React.Component {
           {Diet.length > 0 ? (
             <View>
               {Diet.map(info => 
-              <TouchableOpacity style={{backgroundColor:"skyblue",
-              padding:10}}onPress={()=>{Diet.pop()
+              <TouchableOpacity 
+              style={
+                {backgroundColor:"skyblue",
+                padding:20,
+              marginTop:10}
+              } 
+              onPress={()=>{Diet.pop();
+                this.state.selectedRecipe.pop();
                 this.forceUpdate();}}>
                 <Text>{info}</Text>
               </TouchableOpacity>)}
+              <View style={{marginTop:100}}>
+                <Button title="Create" onPress={() => {
+                  this.createPDf();
+                  console.log("hi")
+                  }}/>
+              </View>
             </View>
           ) : (
             <Text style={styles.infoText}>Enter the Recipe</Text>
@@ -96,7 +126,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   descriptionContainer: {
-    flex: 6,
+    flex: 4,
     padding:10,
   },
   itemText: {
@@ -106,7 +136,7 @@ const styles = StyleSheet.create({
     margin: 2,
   },
   infoText: {
-    //textAlign: 'center',
+    textAlign: 'center',
     fontSize: 16,
   },
 });
