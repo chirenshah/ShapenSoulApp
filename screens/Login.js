@@ -34,11 +34,11 @@ export default class LoginScreen extends React.Component{
                     this.setState({password:text})
                     }} />
                     <View style={styles.button}>
-                        <Button onPress={()=>this.props.navigation.navigate("Home")} title="Login"/>
+                        <Button title="Login" onPress={()=>this.props.navigation.navigate("Home")} />
                     </View>
-                    <Text>Not a User?</Text>
+                    <Text style = {{alignSelf: "center"}}> Not a User? </Text>
                     <TouchableOpacity onPress={()=>this.props.navigation.navigate("Signup")}>
-                        <Text>Signup</Text>
+                        <Text style = {styles.signup}> Sign Up </Text>
                     </TouchableOpacity>
                 </View>
             </View>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#e8eeef"
     },
     container:{
-        marginTop:180
+        marginTop:140
     },
     logo:{
         marginTop:100,
@@ -65,8 +65,13 @@ const styles = StyleSheet.create({
     },
     button:{
         alignSelf:"center",
-        margin:20,
+        margin:5,
         padding:20,
         width:200,
+    },
+    signup:{
+        alignSelf:"center",
+        color:"blue",
+        fontSize:18
     }
 })

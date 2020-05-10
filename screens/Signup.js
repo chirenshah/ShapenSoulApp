@@ -59,7 +59,7 @@ export default class App extends Component {
     render() {
         return(
         <View style={styles.container}>
-            <TextInput placeholder="NAME" style={styles.input}
+            <TextInput placeholder="Name" style={styles.input}
                 value={ this.state.name }
                 onChangeText={(text) =>{
                 this.setState({name:text})
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#e8eeef',
         width:300,
         alignSelf:'center',
-        textAlign:'center'
+        
     },
     picker:{
         paddingLeft:100,
