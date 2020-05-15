@@ -3,7 +3,7 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer'
-import Signup from './screens/Signup'
+import SignUpScreen from './screens/signup'
 import AboutScreen from './screens/About'
 import LoginScreen from './screens/Login'
 import Diet from './screens/Diet'
@@ -29,7 +29,7 @@ export default class App extends React.Component {
       <NavigationContainer>
         <Stack.Navigator headerMode= 'screen'>
           <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
-          <Stack.Screen name="Signup" component={Signup} options={{ title: 'Sign Up' }}/>
+          <Stack.Screen name="Signup" component={SignUpScreen} options={{ title: 'Sign Up' }}/>
           <Stack.Screen name="Home" children={this.home} options= {{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>

@@ -1,137 +1,83 @@
 import React, { Component } from 'react'
-import { View,Button, Text, TouchableOpacity, TextInput , StyleSheet , Picker } from 'react-native'
-import PDF from '../components/PDF'
-import FB, { getUsers ,addUser } from '../components/Fb'
-import firebase from 'react-native-firebase'
-import { Share } from 'react-native-share'
+import {
+    View, 
+    Text, 
+    TouchableOpacity,
+    TextInput ,
+    StyleSheet ,
+    Picker,
+    Button 
+    } from 'react-native'
 
-export default class App extends Component {
+import {signup} from '../components/Fb'
+
+export default class SignUpScreen extends React.Component{
     state = {
-        User:{
-            name:"",
-            contact:"",
-            Address:"",
-            gender:"",
-            BloodG:""
-        },
-        userList:[]
+        email:"",
+        password:""
     }
-
-    getUserNotification = (userList) => {
-        console.log("User Added")        
-        this.setState(prevState => {
-            name: prevState.name = userList
-        })
-        
-    }
-
-    addComplete = (User) =>{
-        console.log("Success")
-        this.props.navigation.navigate("Login")
-    }
-
-    createUser = () => {
-        const User = {
-            name:this.state.name,
-            contact:this.state.contact,
-            Address:this.state.Address,
-            gender:this.state.gender,
-        }
-        addUser(User,this.addComplete)
-    }
-
-    componentDidMount(){
-        getUsers(this.getUserNotification)
-        this.UNSAFE_componentWillMountisMounted = true
-    }
-
-    async readUsers() {
-        var snapshot = await firebase.firestore()
-                .collection('Users')
-                .get()
-        snapshot.forEach((data) => {
-            const userItem = data.data()
-            //this.state.userList.push(userItem)
-            console.log(data);
-        });
-    }
-
-    render() {
+    render(){
         return(
-        <View style={styles.container}>
-            <TextInput placeholder="Name" style={styles.input}
-                value={ this.state.name }
-                onChangeText={(text) =>{
-                this.setState({name:text})
-                }}
-            />
-            <TextInput placeholder="Contact No." style={styles.input}
-                value={ this.state.contact }
-                onChangeText={(text) =>{
-                    this.setState({contact:text})
-                }}
-            />
-            <TextInput placeholder="Address" style={styles.input}
-                value={ this.state.Address}
-                onChangeText={(text) =>{
-                    this.setState({Address:text})
-                }}
-            />
-            <View style={styles.input}>
-                <Picker
-                    selectedValue={this.state.gender}
-                    style={styles.picker}
-                    onValueChange={(itemValue, itemIndex) =>
-                        this.setState({gender: itemValue})
-                    }>
-                    <Picker.Item label="Male" value="Male" />
-                    <Picker.Item label="Female" value="Female" />
-                </Picker>
+            <View style={{backgroundColor:"white",
+            height:800}}>
+                <View style={styles.logo}>
+                <Text style={{fontSize:50}}>Shape N Soul</Text>
+                </View>
+                <View style={styles.container}>
+                    <TextInput placeholder="Email" style={styles.input}
+                    value={ this.state.email }
+                    onChangeText={(text) =>{
+                    this.setState({email:text})
+                    }} />
+                    <TextInput placeholder="Password" style={styles.input}
+                    value={ this.state.password }
+                    secureTextEntry={true}
+                    onChangeText={(text) =>{
+                    this.setState({password:text})
+                    }} />
+                    <TextInput placeholder="Re-enter Password" style={styles.input}
+                    value={ this.state.password }
+                    secureTextEntry={true}
+                    onChangeText={(text) =>{
+                    this.setState({password:text})
+                    }} />
+                    <View style={styles.button}>
+                        <Button title="Signup" onPress={() => {
+                            signup(this.state.email,this.state.password)
+                            }} />
+                    </View>
+                </View>
             </View>
-            <TextInput placeholder="Blood Group" style={styles.input}
-                value={ this.state.BloodG }
-                onChangeText={(text) =>{
-                    this.setState({BloodG:text})
-                }}
-            />
-            <Text>{this.state.name}</Text>
-            <View style={styles.foo}>
-                <Button title="Sign Up" onPress={this.createUser}/>
-            </View>
-            </View>
-            )
-        }
+        )
     }
+}
 
 const styles = StyleSheet.create({
-    container:{
-       padding:20,
-       backgroundColor:"white",
-       height:800
-    },
-    text:{
-        color:'white',
-        fontSize:25,
-        textAlign:'center'
-    },
     input:{
-        borderColor:"black",
-        borderWidth:1,
-        margin:20,
-        backgroundColor:'#e8eeef',
-        width:300,
+        padding:10,
+        margin:10,
         alignSelf:'center',
-        
+        width:300,
+        height:50,
+        textAlign:"center",
+        backgroundColor:"#e8eeef"
     },
-    picker:{
-        paddingLeft:100,
-        width: 300,
-        color:'#C7C7CD',
-        textAlign:'center'
+    container:{
+        marginTop:140
     },
-    foo:{
+    logo:{
+        marginTop:100,
+        alignSelf:"center"
+    },
+    button:{
+        alignSelf:"center",
+        margin:5,
+        padding:20,
         width:200,
-        textAlign:'center',
-        marginLeft:100
+    },
+    signup:{
+        alignSelf:"center",
+        color:"blue",
+        fontSize:18
     }
 })

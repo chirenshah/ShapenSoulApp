@@ -8,12 +8,24 @@ import {
     Picker,
     Button 
     } from 'react-native'
+import {login , subscribeToAuthChanges} from '../components/Fb'
 
 export default class LoginScreen extends React.Component{
     state = {
         email:"",
         password:""
     }
+    componentDidMount(){
+        subscribeToAuthChanges()
+    }
+
+    authStateChanged = (user) => {
+        if(user != null){
+            this.props.navigation.navigate("Home");
+        }
+        console.log("Error");
+    }
+
     render(){
         return(
             <View style={{backgroundColor:"white",
@@ -34,7 +46,7 @@ export default class LoginScreen extends React.Component{
                     this.setState({password:text})
                     }} />
                     <View style={styles.button}>
-                        <Button title="Login" onPress={()=>this.props.navigation.navigate("Home")} />
+                        <Button title="Login" onPress={()=> login(this.state.email,this.state.password) } />
                     </View>
                     <Text style = {{alignSelf: "center"}}> Not a User? </Text>
                     <TouchableOpacity onPress={()=>this.props.navigation.navigate("Signup")}>

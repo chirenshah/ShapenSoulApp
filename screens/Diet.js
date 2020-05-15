@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, View , StyleSheet, Text, Button , TouchableOpacity} from 'react-native';
+import { SafeAreaView,ScrollView, View , StyleSheet, Text, Button , TouchableOpacity} from 'react-native';
 import {getRecipe} from '../components/Fb'
 import Autocomplete from 'react-native-autocomplete-input';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
@@ -94,7 +94,7 @@ export default class App extends React.Component {
     const Users = this.findUser(query);
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Autocomplete
           autoCapitalize="none"
           autoCorrect={true}
@@ -123,7 +123,7 @@ export default class App extends React.Component {
           {Diet.length > 0 ? (
             <View>
               {Diet.map(info => 
-              <TouchableOpacity 
+              <TouchableOpacity key = {() => Math.random.toString()}
               style={
                 {backgroundColor:"skyblue",
                 padding:20,
@@ -142,7 +142,7 @@ export default class App extends React.Component {
             <Text style={styles.infoText}>Enter the Recipe</Text>
           )}
         </View>
-    </View>
+    </ScrollView>
   );
 }
 }
