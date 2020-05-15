@@ -4,7 +4,7 @@ import {createDrawerNavigator} from '@react-navigation/drawer'
 import Calendar from './Calendar'
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import {subscribeToAuthChanges} from '../components/Fb'
 
 function Appointment({navigation}){
 	return(
@@ -20,9 +20,17 @@ function Appointment({navigation}){
 		)
 } 
 
+
 const Stack1 = createStackNavigator()
 
 export default class Appointments extends React.Component {
+componentDidMount(){
+    subscribeToAuthChanges(this.authStateChanged)
+}
+
+authStateChanged = (user) => {
+	console.log(user)
+}
   render() {
     return (   	
     	<NavigationContainer independent = {true}>

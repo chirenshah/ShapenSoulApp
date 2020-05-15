@@ -16,11 +16,11 @@ export default class LoginScreen extends React.Component{
         password:""
     }
     componentDidMount(){
-        subscribeToAuthChanges()
+        subscribeToAuthChanges(this.authStateChanged)
     }
 
     authStateChanged = (user) => {
-        if(user != null){
+        if(user !== null){
             this.props.navigation.navigate("Home");
         }
         console.log("Error");
