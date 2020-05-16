@@ -23,20 +23,25 @@ class App extends Component {
   }
 
   displayUser = (item)=> {
+    if (item === '') {
+      return [];
+    }
     let Users = this.state.Users
+    console.log(Users)
     return Users.filter(Users => Users.Name.search(item.Name) >= 0);  }
 
   componentDidMount() {
     getUsers(this.userList)
   }
+
   findUser(query) {
     if (query === '') {
       return [];
     }
- 
     const { Users } = this.state;
     //making a case insensitive regular expression to get similar value from the film json
     const regex = new RegExp(`${query.trim()}`, 'i');
+    console.log(Users)
     //return the filtered film array according the query from the input
     return Users.filter(Users => Users.Name.search(regex) >= 0);
   }

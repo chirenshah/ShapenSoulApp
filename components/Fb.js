@@ -27,14 +27,14 @@ export function signout(onSignedOut) {
 
 }
 
-export function updateFood(food, updateComplete) {
-    food.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-    console.log("Updating food in firebase");
+export function updateProfile(User, updateComplete) {
+    User.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    console.log(User);
 
     firebase.firestore()
-        .collection('Foods')
-        .doc(food.id).set(food)
-        .then(() => updateComplete(food))
+        .collection('Users')
+        .doc(User.email).set(User)
+        .then(() => updateComplete(User))
         .catch((error) => console.log(error));
 }
 

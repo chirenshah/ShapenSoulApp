@@ -1,60 +1,37 @@
-import React, { Component } from 'react'
-import { View,Button, Text, TouchableOpacity, TextInput , StyleSheet , Picker } from 'react-native'
-import PDF from '../components/PDF'
-import FB, { getUsers ,signup } from '../components/Fb'
+import React from 'react'
+import { View,Button, Text, TextInput , StyleSheet , Picker } from 'react-native'
+import { subscribeToAuthChanges,updateProfile } from '../components/Fb'
 import firebase from 'react-native-firebase'
-import { Share } from 'react-native-share'
 
 export default class UserProfile extends React.Component {
     state = {
-        User:{
-            name:"",
-            contact:"",
-            Address:"",
-            gender:"",
-            BloodG:""
-        },
-        userList:[]
+        name:"",
+        email:"",
+        contact:"",
+        Address:"",
+        gender:"",
+        BloodG:"",
+    }
+    componentDidMount(){
+        subscribeToAuthChanges(this.authStateChanged)
+    }
+    authStateChanged = (User) =>{
+        this.setState({email:User.email})
     }
 
-    getUserNotification = (userList) => {
-        console.log("User Added")        
-        this.setState(prevState => {
-            name: prevState.name = userList
-        })
-        
-    }
-
-    addComplete = (User) =>{
-        console.log("Success")
-        this.props.navigation.navigate("Login")
-    }
-
-    createUser = () => {
+    updateComplete = (User)  =>{
+        console.log(User);
+    } 
+    update = () => {
         const User = {
             name:this.state.name,
+            email:this.state.email,
             contact:this.state.contact,
             Address:this.state.Address,
             gender:this.state.gender,
         }
-        addUser(User,this.addComplete)
-    }
-
-    componentDidMount(){
-        getUsers(this.getUserNotification)
-        this.UNSAFE_componentWillMountisMounted = true
-    }
-
-    async readUsers() {
-        var snapshot = await firebase.firestore()
-                .collection('Users')
-                .get()
-        snapshot.forEach((data) => {
-            const userItem = data.data()
-            //this.state.userList.push(userItem)
-            console.log(data);
-        });
-    }
+        updateProfile(User,this.updateComplete)
+    }  
 
     render() {
         return(
@@ -96,7 +73,9 @@ export default class UserProfile extends React.Component {
             />
             <Text>{this.state.name}</Text>
             <View style={styles.foo}>
-                <Button title="Sign Up" onPress={this.signup}/>
+                <Button title="Update Profile" onPress={() => {
+                    this.update();
+                }}/>
             </View>
             </View>
             )

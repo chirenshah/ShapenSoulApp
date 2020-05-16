@@ -11,7 +11,9 @@ const screens ={
 }
 
 export default function Settings({navigation: { navigate }}) {
-	  
+	onSignedOut = () =>{
+		navigate('Login')
+	}
 			return (   	
 				<View>
 				
@@ -22,7 +24,7 @@ export default function Settings({navigation: { navigate }}) {
 				</TouchableOpacity>
 
 				<TouchableOpacity
-					onPress = {() =>{ signout(); navigate('Login')} }
+					onPress = {() =>{ signout(this.onSignedOut);} }
 					>
 					<Text> Logout</Text>
 				</TouchableOpacity>
