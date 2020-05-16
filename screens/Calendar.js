@@ -27,22 +27,22 @@ export default class Calc extends Component {
 	      <StatusBar barStyle="light-content"/>
 	      
 	        <Calendar
-				onDayPress={this.onDayPress}
-				style={styles.calendar}
-				hideExtraDays
+    				onDayPress={this.onDayPress}
+    				style={styles.calendar}
+    				hideExtraDays
 
-				markedDates={{[this.state.selected]: {selected: true}}}
-				theme={{
-					selectedDayBackgroundColor: 'blue',
-					todayTextColor: 'blue',
-					arrowColor: 'blue',            
+    				markedDates={{[this.state.selected]: {selected: true}}}
+    				theme={{
+    					selectedDayBackgroundColor: 'blue',
+    					todayTextColor: 'blue',
+    					arrowColor: 'blue',            
 				}}
 	        />
-	        <View style = {styles.button} >
-		        <Button 
-			        title="Request Appointment"
-			        onPress={() => console.log("Requested") }
-		        />
+        <View style = {styles.button} >
+	        <Button 
+		        title="Request Appointment"
+		        onPress={() => console.log("Requested") }
+	        />
 		    </View>
       </View>
     );

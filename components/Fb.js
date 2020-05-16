@@ -24,6 +24,7 @@ export function signout(onSignedOut) {
         .then(() => {
             onSignedOut();
         })
+
 }
 
 export function updateFood(food, updateComplete) {

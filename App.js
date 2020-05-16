@@ -3,12 +3,13 @@ import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer'
-import SignUpScreen from './screens/signup'
+import SignUpScreen from './screens/Signup'
 import AboutScreen from './screens/About'
 import LoginScreen from './screens/Login'
 import Diet from './screens/Diet'
 import User from './screens/UserDb'
 import Appointments from './screens/Appointments'
+import Settings from './screens/Settings'
 
 
 const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ export default class App extends React.Component {
           <Drawer.Screen name="Diet generator" component={Diet} />
           <Drawer.Screen name="User" component={User}/> 
           <Drawer.Screen name="Appointments" component={Appointments}/> 
+          <Drawer.Screen name="Settings" component={Settings}/>
       </Drawer.Navigator>
     )}
 

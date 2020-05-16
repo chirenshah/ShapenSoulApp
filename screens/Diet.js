@@ -1,11 +1,10 @@
 import React from 'react';
 import { SafeAreaView,ScrollView, View , StyleSheet, Text, Button , TouchableOpacity} from 'react-native';
-import {getRecipe , signout} from '../components/Fb'
+import {getRecipe } from '../components/Fb'
 import Autocomplete from 'react-native-autocomplete-input';
 import RNHTMLtoPDF from 'react-native-html-to-pdf';
 import Share from "react-native-share";
 import RNFetchBlob from 'rn-fetch-blob';
-import LoginScreen from './Login'
 
 
 export default class App extends React.Component {
@@ -96,11 +95,7 @@ export default class App extends React.Component {
     const comp = (a, b) => a.toLowerCase().trim() === b.toLowerCase().trim();
     return (
     <ScrollView style={styles.container}>
-      <Button title ="Logout" onclick = {() => {
-        signout();
-        this.props.navigation.navigate(LoginScreen);
-      }
-      }/>
+      
       <Autocomplete
           autoCapitalize="none"
           autoCorrect={true}

@@ -5,7 +5,7 @@ import FB, { getUsers ,signup } from '../components/Fb'
 import firebase from 'react-native-firebase'
 import { Share } from 'react-native-share'
 
-export default class App extends Component {
+export default class UserProfile extends React.Component {
     state = {
         User:{
             name:"",

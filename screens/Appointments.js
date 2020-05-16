@@ -21,26 +21,28 @@ function Appointment({navigation}){
 } 
 
 
-const Stack1 = createStackNavigator()
+const Stack = createStackNavigator()
 
 export default class Appointments extends React.Component {
-componentDidMount(){
-    subscribeToAuthChanges(this.authStateChanged)
-}
+	
+	componentDidMount(){
+	    subscribeToAuthChanges(this.authStateChanged)
+	}
 
-authStateChanged = (user) => {
-	console.log(user)
-}
-  render() {
-    return (   	
-    	<NavigationContainer independent = {true}>
-    		<Stack1.Navigator>
-    			<Stack1.Screen name = "Appointment" component = {Appointment} options={{ title: 'Appointments' }}/>
-    			<Stack1.Screen name = "Calendar" component = {Calendar}   options={{ title: 'Calendar' }}/>
-    		</Stack1.Navigator>
-    	</NavigationContainer>
-	)
-}}
+	authStateChanged = (user) => {
+		console.log(user)
+	}
+
+	  render() {
+	    return (   	
+	    	<NavigationContainer independent = {true}>
+	    		<Stack.Navigator>
+	    			<Stack.Screen name = "Appointment" component = {Appointment} options={{ title: 'Appointments' }}/>
+	    			<Stack.Screen name = "Calendar" component = {Calendar}   options={{ title: 'Calendar' }}/>
+	    		</Stack.Navigator>
+	    	</NavigationContainer>
+		)
+	}}
 
 
 const styles = StyleSheet.create({
