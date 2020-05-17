@@ -13,8 +13,21 @@ import {signup} from '../components/Fb'
 
 export default class SignUpScreen extends React.Component{
     state = {
+        Name:"",
         email:"",
-        password:""
+        password:"",
+        password2:""
+    }
+
+    validation = () => {
+        if(this.state.password == this.state.password2){
+            signup(this.state.email,this.state.password,this.state.Name)
+        }
+        else{
+            return(
+                <View><Text style={styles.error}>password do not match</Text></View>
+            )
+        }
     }
     render(){
         return(
@@ -24,6 +37,11 @@ export default class SignUpScreen extends React.Component{
                 <Text style={{fontSize:50}}>Shape N Soul</Text>
                 </View>
                 <View style={styles.container}>
+                <TextInput placeholder="Name" style={styles.input}
+                    value={ this.state.email }
+                    onChangeText={(text) =>{
+                    this.setState({Name:text})
+                    }} />
                     <TextInput placeholder="Email" style={styles.input}
                     value={ this.state.email }
                     onChangeText={(text) =>{
@@ -39,11 +57,11 @@ export default class SignUpScreen extends React.Component{
                     value={ this.state.password }
                     secureTextEntry={true}
                     onChangeText={(text) =>{
-                    this.setState({password:text})
+                    this.setState({password2:text})
                     }} />
                     <View style={styles.button}>
                         <Button title="Signup" onPress={() => {
-                            signup(this.state.email,this.state.password)
+                            
                             }} />
                     </View>
                 </View>
@@ -79,5 +97,8 @@ const styles = StyleSheet.create({
         alignSelf:"center",
         color:"blue",
         fontSize:18
+    },
+    error:{
+        color:"red"
     }
 })
