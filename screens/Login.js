@@ -83,7 +83,7 @@ export default class LoginScreen extends React.Component{
                     this.setState({ empty: false });
                 }}
                 width={0.9}
-                visible={this.state.defaultAnimationDialog}
+                visible={this.state.empty}
                 rounded
                 actionsBordered
                 dialogTitle={
@@ -120,7 +120,7 @@ export default class LoginScreen extends React.Component{
                     this.setState({ error: false });
                 }}
                 width={0.9}
-                visible={this.state.defaultAnimationDialog}
+                visible={this.state.error}
                 rounded
                 actionsBordered
                 dialogTitle={
