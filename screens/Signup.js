@@ -1,72 +1,126 @@
-import React, { Component } from 'react';
-import { TextInput,Text, View,ActivityIndicator, TouchableWithoutFeedback, StyleSheet, Button, Keyboard } from 'react-native';
-import {signout} from '../components/Fb'
-import {LoginScreen} from './Login'
-import {UserProfile} from './Profile'
-//import { useNavigation } from '@react-navigation/native';
-import {signup} from '../components/Fb'
-import {Formik} from 'formik'
-//import { TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import React , {Component} from 'react';
+import {
+  SafeAreaView,
+  TextInput,
+  Button,
+  ActivityIndicator,
+  Text,
+  View,
+  StyleSheet
+} from 'react-native';
+import { Formik } from 'formik';
 import * as yup from 'yup';
+import {signup} from '../components/Fb'
 
+const validationSchema = yup.object().shape({
+  Name:yup.string().required().label('Name'),
+  email: yup
+    .string()
+    .label('Email')
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .label('Password')
+    .required()
+    .min(6, 'Seems a bit short...')
+    .max(14, 'Password character limit is 10'),
+password2: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
+}); 
 
-export default class Test extends Component { 
+export default class Test extends Component{
+
+    state={
+        error:false
+    }
+
+    popup = (error) => {
+        this.setState({
+            error:True
+        })
+        return Promise.reject()
+    }
 
     render(){
         return(
-            <View style={{backgroundColor:"white",
-            height:800}}>
+            <SafeAreaView style={{ marginTop: 50 }}>
                 <View style={styles.logo}>
-                <Text style={{fontSize:50}}>Shape N Soul</Text>
-                </View>
-            <View style={styles.container}>
-                <TouchableWithoutFeedback onPress={() =>{Keyboard.dismiss}}>
-                <Formik initialValues={{Name:"",email:"",password:"",password2:""}}
-                validationSchema ={yup.object().shape({
-                    Name:yup.string().required().label('Name'),
-                    email:yup.string().required().email().label('email'),
-                    password: yup.string().label('Password').required('Password is required')
-                                .min(2, 'Seems a bit short...')
-                                .max(10, 'Password character limit is 10'),
-                    password2: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
-                })}
-                onSubmit={(values) => {
-                    //console.log(values.Name)
-                    signup(values.email,values.password,values.Name)
-                }}>
-                {(props) => (
-                    <View>
-                        <Text style={{ color: 'red' }}>{props.errors.Name && props.touched.Name}</Text>
-                        <TextInput placeholder="Name" style={styles.input}
-                        value={ props.values.Name }
-                        onChangeText={props.handleChange("Name")}
-                        autoFocus />
-                        <Text style={{ color: 'red' }}>{props.errors.email && props.touched.email}</Text>
-                        <TextInput placeholder="Email" style={styles.input}
-                        value={ props.values.Email }
-                        onChangeText={props.handleChange("Email")} 
-                        onBlur={props.handleBlur('email')}
-                        />
-                        <TextInput placeholder="Password" style={styles.input}
-                        value={ props.values.password }
-                        onChangeText={props.handleChange("password")} />
-                        <TextInput placeholder="Re-enter the assword" style={styles.input}
-                        value={ props.values.password2 }
-                        onChangeText={props.handleChange("password2")} />
-                        <View style={styles.button}>
-                        {props.isSubmitting ? (
-                            <ActivityIndicator />
-                        ) : (
-                            <Button title="Submit" onPress={props.handleSubmit} />
-                            )}
-                    </View>
-                    </View>
+                    <Text style={{fontSize:50}}>Shape N Soul</Text>
+              </View>
+              <Formik
+                initialValues={{Name:"",email:"",password:"",password2:""}}
+                onSubmit={(values, actions) => {
+                  signup(values.email,values.password,values.Name,this.popup)
+                  actions.setSubmitting(false);
+                }}
+                validationSchema={validationSchema}
+              >
+                {formikProps => (
+                  <React.Fragment>
+                    <View style={styles.container}>
+                    <TextInput
+                        placeholder="Name"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('Name')}
+                        onBlur={formikProps.handleBlur('Name')}
+                        autoFocus
+                        returnKeyType="next"
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.Name && formikProps.errors.Name}
+                      </Text>
+          
+                      <TextInput
+                        placeholder="Email"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('email')}
+                        onBlur={formikProps.handleBlur('email')}
+                        
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.email && formikProps.errors.email} 
+                      </Text>
+                      {this.state.error ? (<View>
+                          <Text style={styles.error}>
+                            Email already exists </Text>
+                      </View>):(<View></View>)}
+          
+                      <TextInput
+                        placeholder="Password"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('password')}
+                        onBlur={formikProps.handleBlur('password')}
+                        secureTextEntry
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.password && formikProps.errors.password}
+                      </Text>
+          
+                      <TextInput
+                        placeholder="Re-enter password"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('password2')}
+                        onBlur={formikProps.handleBlur('password2')}
+                        secureTextEntry
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.password2 && formikProps.errors.password2}
+                      </Text>
+          
+                    {formikProps.isSubmitting ? (
+                      <ActivityIndicator />
+                    ) : (
+                      <View style={styles.button}>
+                      <Button title="Submit" onPress={formikProps.handleSubmit} />
+                      </View>)}
+                      </View>
+                  </React.Fragment>
                 )}
-                </Formik>
-                </TouchableWithoutFeedback>
-            </View>
-            </View>
-        )
+              </Formik>
+              <View>
+              <Text>{this.state.error}</Text></View>
+            </SafeAreaView>
+          )
     }
 }
 
@@ -76,8 +130,6 @@ const styles = StyleSheet.create({
         alignSelf:"center"
     },
     input:{
-        padding:10,
-        margin:10,
         alignSelf:'center',
         width:300,
         height:50,
@@ -85,7 +137,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#e8eeef"
     },
     container:{
-        marginTop:140,
+        marginTop:80,
         margin:40
     },
     logo:{
