@@ -1,18 +1,17 @@
 import firebase from 'react-native-firebase';
 import uuid4 from 'uuid/v4';
 
-export function login( email, password , popup ) {
+export async function login( email, password , popup ) {
     firebase.auth().signInWithEmailAndPassword(email, password)
-        .then((value) => console.log(value))
         .catch((error) => popup(error))
 }
 
 export async function signup(email, password, Name, popup) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
-    .catch((error)=> popup(error))
     .then((userInfo) => {
             userInfo.user.updateProfile({ displayName: Name.trim() })
         })
+    .catch((error)=> popup(error))
 }
 
 export function subscribeToAuthChanges(authStateChanged) {

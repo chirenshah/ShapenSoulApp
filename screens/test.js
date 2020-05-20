@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import {signup} from '../components/Fb'
+import {login,subscribeToAuthChanges,signout} from '../components/Fb'
 
 const validationSchema = yup.object().shape({
   Name:yup.string().required().label('Name'),
@@ -35,8 +35,19 @@ export default class Test extends Component{
         submit:true
     }
 
+    componentDidMount(){
+        subscribeToAuthChanges(this.authStateChanged)
+    }
+
+    authStateChanged=(user) =>{
+        if(user){
+            console.log(user)
+            //this.props.navigation.navigate("Home");
+        }
+    }
 
     popup = (error) => {
+        console.log(error)
         this.setState({
             error:error.message
         })
@@ -49,9 +60,9 @@ export default class Test extends Component{
                     <Text style={{fontSize:50}}>Shape N Soul</Text>
               </View>
               <Formik
-                initialValues={{Name:"",email:"",password:"",password2:""}}
+                initialValues={{email:"",password:""}}
                 onSubmit={(values, actions) => {
-                  signup(values.email,values.password,values.Name,this.popup)
+                  login(values.email,values.password,this.popup)
                   if(this.state.error == ''){
                     //add navigation code here
                   }
@@ -62,18 +73,6 @@ export default class Test extends Component{
                 {formikProps => (
                   <React.Fragment>
                     <View style={styles.container}>
-                    <TextInput
-                        placeholder="Name"
-                        style={styles.input}
-                        onChangeText={formikProps.handleChange('Name')}
-                        onBlur={formikProps.handleBlur('Name')}
-                        autoFocus
-                        returnKeyType="next"
-                      />
-                      <Text style={styles.error}>
-                        {formikProps.touched.Name && formikProps.errors.Name}
-                      </Text>
-          
                       <TextInput
                         placeholder="Email"
                         style={styles.input}
@@ -94,18 +93,6 @@ export default class Test extends Component{
                       <Text style={styles.error}>
                         {formikProps.touched.password && formikProps.errors.password}
                       </Text>
-          
-                      <TextInput
-                        placeholder="Re-enter password"
-                        style={styles.input}
-                        onChangeText={formikProps.handleChange('password2')}
-                        onBlur={formikProps.handleBlur('password2')}
-                        secureTextEntry
-                      />
-                      <Text style={styles.error}>
-                        {formikProps.touched.password2 && formikProps.errors.password2}
-                      </Text>
-                    
                     {formikProps.isSubmitting ? (
                       <ActivityIndicator />
                     ) : (
@@ -135,7 +122,7 @@ const styles = StyleSheet.create({
         backgroundColor:"#e8eeef"
     },
     container:{
-        marginTop:80,
+        marginTop:280,
         margin:40
     },
     logo:{
