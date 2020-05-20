@@ -7,12 +7,13 @@ export function login( email, password , popup ) {
         .catch((error) => popup(error))
 }
 
-export function signup(email, password,Name ) {
+export function signup(email, password, Name , ) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
         .then((userInfo) => {
             console.log(userInfo);
             userInfo.user.updateProfile({ displayName: Name.trim() })
-        .then(() => { })
+            .catch((error)=> console.log(error+"Fuck"))
+            .then((response)=>console.log("Joo"+ response))
         })
 }
 
