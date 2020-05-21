@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View, TouchableOpacity, StatusBar } from 'react-native';
 import {Calendar} from 'react-native-calendars';
+import {appointment} from '../components/Fb'
+
  
 export default class Calc extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      selectedDate: null,
+    };
     this.onDayPress = this.onDayPress.bind(this);
   }
-
+  
   onDayPress(day) {
     this.setState({
-      selected: day.dateString
+      selected: day.dateString,
+      selectedDate: day.dateString
+
     });
-    console.log(day)
+    console.log(day)   
   }
 
   _onPressBack(){
@@ -22,7 +28,9 @@ export default class Calc extends Component {
   }
 
   render() {
-    return (
+    const { selectedDate } = this.state
+    //const DateString = selectedDate ? selectedDate.toString() : '';
+    return ( 
       <View style={styles.container}>
 	      <StatusBar barStyle="light-content"/>
 	      
@@ -30,7 +38,7 @@ export default class Calc extends Component {
     				onDayPress={this.onDayPress}
     				style={styles.calendar}
     				hideExtraDays
-
+            minDate={Date()}
     				markedDates={{[this.state.selected]: {selected: true}}}
     				theme={{
     					selectedDayBackgroundColor: 'blue',
@@ -41,7 +49,8 @@ export default class Calc extends Component {
         <View style = {styles.button} >
 	        <Button 
 		        title="Request Appointment"
-		        onPress={() => console.log("Requested") }
+		        //onPress = {() => }
+            onPress={() => console.log("Requested", selectedDate)}
 	        />
 		    </View>
       </View>
