@@ -10,6 +10,9 @@ export default class UserProfile extends React.Component {
         contact:"",
         Address:"",
         gender:"",
+        appointment:"",
+        ApptReq: false,
+        ApptConfirm: false,
         BloodG:"",
     }
     componentDidMount(){
@@ -28,7 +31,11 @@ export default class UserProfile extends React.Component {
             email:this.state.email,
             contact:this.state.contact,
             Address:this.state.Address,
-            gender:this.state.gender,
+            gender:this.state.gender,            
+            appointment:this.state.appointment,
+            ApptConfirm:this.state.ApptConfirm,
+            ApptReq:this.state.ApptReq,
+
         }
         updateProfile(User,this.updateComplete)
     }  
