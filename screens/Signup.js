@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
     },
     container:{
         marginTop:80,
-        margin:40
+        marginBottom:60
     },
     logo:{
         marginTop:100,

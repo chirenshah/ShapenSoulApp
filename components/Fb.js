@@ -6,6 +6,11 @@ export async function login( email, password , popup ) {
         .catch((error) => popup(error))
 }
 
+async function signInWithPhoneNumber(PhoneNumber) {
+    const confirmation = await firebase.auth().signInWithPhoneNumber(PhoneNumber);
+    setConfirm(confirmation);
+  }
+
 export async function signup(email, password, Name, popup) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((userInfo) => {
@@ -47,7 +52,7 @@ export function reqAppointment(appointment){
 
     var batch = db.batch()
     var client = db.collection('Users').doc(email)
-    batch.update(client, {ApptReq: true, appointment:{appointment}})
+    batch.update(client, {ApptReq: true, appointment:appointment})
     var admin = db.collection('Users').doc('admin@a.com')
     batch.update(admin, {ApptReq: true, appointment:{appointment, clientName}})   
     batch.commit().then(function(){

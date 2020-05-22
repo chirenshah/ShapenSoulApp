@@ -1,174 +1,208 @@
-import React, { Component } from 'react'
+import React , {Component} from 'react';
 import {
-    View, 
-    Text, 
-    TouchableOpacity,
-    TextInput ,
-    StyleSheet ,
-    Picker,
-    Button 
-    } from 'react-native'
-import {login , subscribeToAuthChanges} from '../components/Fb'
-import Dialog, {
-    DialogTitle,
-    DialogContent,
-    DialogFooter,
-    DialogButton,
-    SlideAnimation,
-    ScaleAnimation,
-  } from 'react-native-popup-dialog';
+  SafeAreaView,
+  TextInput,
+  Button,
+  ActivityIndicator,
+  Text,
+  View,
+  StyleSheet,
+  TouchableOpacity
+} from 'react-native';
+import { Formik } from 'formik';
+import * as yup from 'yup';
+import {login,subscribeToAuthChanges,loginPhone,signout} from '../components/Fb'
+const validationSchema = yup.object().shape({
+  email: yup
+    .string()
+    .label('Email')
+    .email()
+    .required(),
+  password: yup
+    .string()
+    .label('Password')
+    .required()
+    .min(6, 'Seems a bit short...')
+    .max(14, 'Password character limit is 10')
+});
 
-export default class LoginScreen extends React.Component{
-    state = {
-        email:"",
-        password:"",
-        empty:false,
-        error:false,
-        errordis:""
+const phoneValidation = yup.object().shape({
+  phone: yup.number()
+  .typeError("That doesn't look like a phone number")
+  .positive("A phone number can't start with a minus")
+  .integer("A phone number can't include a decimal point")
+  .min(999999999,'Seems a bit Short')
+  .required('A phone number is required')
+});
+
+export default class Test extends Component{
+
+    state={
+        error:"",
+        submit:true,
+        phone:true,
+        button:"SEND OTP",
+        switch:"Login with Email"
     }
+
     componentDidMount(){
         subscribeToAuthChanges(this.authStateChanged)
     }
-    validation= () =>{
-        if(this.state.email !== "" & this.state.password !== "")
-        {
-            login(this.state.email,this.state.password,this.popup) 
-        }
-        else{
-            this.setState({
-                empty:true
-            })
-        }
-        }
-        popup(error){
-           this.setState({
-               error:true,
-               errordis:error})
-        }
-    authStateChanged = (user) => {
-        if(user !== null){
-            this.props.navigation.navigate("Home");
+
+    authStateChanged=(user) =>{
+        if(user){
+            //this.props.navigation.navigate("Home");
         }
     }
 
+    popup = (error) => {
+        this.setState({
+            error:error.message
+        })
+    }
+    switch = ()=>{
+      var bool
+      var foo
+      if(this.state.phone){
+        bool=false
+        foo = "Login with Phone"}
+        else{
+          bool=true
+          foo="Login with Email"
+        }
+      this.setState({
+      phone:bool,
+      switch:foo
+    })}
     render(){
         return(
-            <View style={{backgroundColor:"white",
-            height:800}}>
+            <SafeAreaView style={{ marginTop: 50 }}>
                 <View style={styles.logo}>
-                <Text style={{fontSize:50}}>Shape N Soul</Text>
-                </View>
-                <View style={styles.container}>
-                    <TextInput placeholder="Email" style={styles.input}
-                    value={ this.state.email }
-                    onChangeText={(text) =>{
-                    this.setState({email:text})
-                    }} />
-                    <TextInput placeholder="Password" style={styles.input}
-                    value={ this.state.password }
-                    secureTextEntry={true}
-                    onChangeText={(text) =>{
-                    this.setState({password:text})
-                    }} />
-                    <View style={styles.button}>
-                        <Button title="Login" onPress={()=> this.validation()} />
-                    </View>
-                    <Text style = {{alignSelf: "center"}}> Not a User? </Text>
-                    <TouchableOpacity onPress={()=>this.props.navigation.navigate("Signup")}>
-                        <Text style = {styles.signup}> Sign Up </Text>
-                    </TouchableOpacity>
-                </View>
-                <Dialog
-                onDismiss={() => {
-                    this.setState({ empty: false });
+                    <Text style={{fontSize:50}}>Shape N Soul</Text>
+              </View>
+              {this.state.phone ? (<View>
+                <Formik
+                initialValues={{phone:"",otp:""}}
+                onSubmit={(values, actions) => {
+                  console.log(values)
                 }}
-                width={0.9}
-                visible={this.state.empty}
-                rounded
-                actionsBordered
-                dialogTitle={
-                <DialogTitle
-                    title="Email or Password Field is empty"
-                style={{
-                    backgroundColor: '#F7F7F8',
+                validationSchema={phoneValidation}>
+                {formikProps => (
+                  <React.Fragment>
+                    <View style={styles.container}>
+                      <TextInput
+                        placeholder="Phone Number"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('phone')}
+                        onBlur={formikProps.handleBlur('phone')}
+                        keyboardType="numeric"
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.phone && formikProps.errors.phone} 
+                      </Text>
+                      {this.state.button == "SEND OTP" ? (null):(<TextInput
+                        placeholder="OTP"
+                        style={styles.otp}
+                        onChangeText={formikProps.handleChange('otp')}
+                        onBlur={formikProps.handleBlur('otp')}
+                      />)} 
+                    {formikProps.isSubmitting ? (
+                      <ActivityIndicator />
+                    ) : (
+                      <View style={styles.button}>
+                      <Button title={this.state.button} onPress={formikProps.handleSubmit} />
+                      </View>)}
+                      </View>
+                  </React.Fragment>
+                )}
+              </Formik>
+              </View>):(<View>
+                <Formik
+                initialValues={{email:"",password:""}}
+                onSubmit={(values, actions) => {
+                  login(values.email,values.password,this.popup)
+                  if(this.state.error == ''){
+                    //add navigation code here
+                  }
+                  else{
+                    actions.setSubmitting(false)
+                  }
+                  
                 }}
-                hasTitleBar={false}
-                align="center"
-                />
-                }
-                footer={
-                    <DialogFooter>
-                    <DialogButton
-                        text="OK"
-                        bordered
-                        onPress={() => {
-                        this.setState({ empty: false });
-                        }}
-                        key="button-2"
-                    />
-                    </DialogFooter>
-                }>
-                <DialogContent
-                    style={{
-                    backgroundColor: '#F7F7F8',
-                    }}>
-                    <Text>Please fill both Email and Password field</Text>
-                </DialogContent>
-                </Dialog>
-                <Dialog
-                onDismiss={() => {
-                    this.setState({ error: false });
-                }}
-                width={0.9}
-                visible={this.state.error}
-                rounded
-                actionsBordered
-                dialogTitle={
-                <DialogTitle
-                    title="Login Error"
-                style={{
-                    backgroundColor: '#F7F7F8',
-                }}
-                hasTitleBar={false}
-                align="center"
-                />
-                }
-                footer={
-                    <DialogFooter>
-                    <DialogButton
-                        text="OK"
-                        bordered
-                        onPress={() => {
-                        this.setState({ incorrect: false });
-                        }}
-                        key="button-2"
-                    />
-                    </DialogFooter>
-                }>
-                <DialogContent
-                    style={{
-                    backgroundColor: '#F7F7F8',
-                    }}>
-                    <Text>{this.state.errordis}</Text>
-                </DialogContent>
-                </Dialog>
-            </View>
-        )
+                validationSchema={validationSchema}
+              >
+                {formikProps => (
+                  <React.Fragment>
+                    <View style={styles.container}>
+                    <Text style={styles.error}>
+                        {this.state.error} 
+                      </Text>
+                      <TextInput
+                        placeholder="Email"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('email')}
+                        onBlur={formikProps.handleBlur('email')}
+                        
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.email && formikProps.errors.email} 
+                      </Text>
+                      <TextInput
+                        placeholder="Password"
+                        style={styles.input}
+                        onChangeText={formikProps.handleChange('password')}
+                        onBlur={formikProps.handleBlur('password')}
+                        secureTextEntry
+                      />
+                      <Text style={styles.error}>
+                        {formikProps.touched.password && formikProps.errors.password}
+                      </Text>
+                    {formikProps.isSubmitting ? (
+                      <ActivityIndicator />
+                    ) : (
+                      <View style={styles.button}>
+                      <Button title="Submit" onPress={formikProps.handleSubmit} />
+                      </View>)}
+                      </View>
+                  </React.Fragment>
+                )}
+              </Formik>
+              </View>)}
+              <TouchableOpacity style={styles.switch} onPress={this.switch}>
+                    <Text>{this.state.switch}</Text>
+              </TouchableOpacity>
+            </SafeAreaView>
+          )
     }
 }
 
 const styles = StyleSheet.create({
+    error:{
+        color:"red",
+        alignSelf:"center",
+        textAlign:"center"
+    },
     input:{
-        padding:10,
-        margin:10,
         alignSelf:'center',
         width:300,
+        margin:20,
         height:50,
         textAlign:"center",
         backgroundColor:"#e8eeef"
     },
+    otp:{
+      alignSelf:'center',
+      width:150,
+      height:50,
+      textAlign:"center",
+      backgroundColor:"#e8eeef",
+      margin:20
+    },
     container:{
-        marginTop:140
+        marginTop:200,
+        margin:40,
+        borderWidth:1,
+        borderColor:"white"
     },
     logo:{
         marginTop:100,
@@ -176,13 +210,13 @@ const styles = StyleSheet.create({
     },
     button:{
         alignSelf:"center",
-        margin:5,
-        padding:20,
         width:200,
     },
-    signup:{
-        alignSelf:"center",
-        color:"blue",
-        fontSize:18
+    switch:{
+      alignSelf:"center",
+      width:300,
+      textAlign:"center",
+      marginLeft:200,
+      fontSize:25
     }
 })
