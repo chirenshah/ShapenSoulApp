@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, Button, Text, View, TouchableOpacity, StatusBar } from 'react-native';
 import {Calendar} from 'react-native-calendars';
-import {appointment} from '../components/Fb'
-
+import {reqAppointment}  from '../components/Fb'
  
 export default class Calc extends Component {
   constructor(props) {
@@ -49,8 +48,8 @@ export default class Calc extends Component {
         <View style = {styles.button} >
 	        <Button 
 		        title="Request Appointment"
-		        //onPress = {() => }
-            onPress={() => console.log("Requested", selectedDate)}
+		        onPress = {() => reqAppointment(selectedDate)}
+            //onPress={() => console.log("Requested", selectedDate)}
 	        />
 		    </View>
       </View>

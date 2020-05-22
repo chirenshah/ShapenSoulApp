@@ -9,7 +9,7 @@ export async function login( email, password , popup ) {
 export async function signup(email, password, Name, popup) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
     .then((userInfo) => {
-            userInfo.user.updateProfile({ displayName: Name.trim() })
+            userInfo.user.updateProfile({ displayName: Name })
         })
     .catch((error)=> popup(error))
 }
@@ -20,12 +20,46 @@ export function subscribeToAuthChanges(authStateChanged) {
     })
 }
 
+// export function reqAppointment(Appointment){
+//     firebase.firestore()
+//         .collection('Users')
+//         .doc('a@abc.com')
+//         .update({
+//             ApptReq: true,
+//             appointment: {Appointment}
+//         })
+//         // .doc('admin@a.com')
+//         // .update({
+//         //     ApptReq: true,
+//         //     appointment: {Appointment}
+//         // })
+//         .then(() => {
+//             console.log('Appointment Requested!')
+//         })
+// }
+
+export function reqAppointment(appointment){
+    var db = firebase.firestore()
+
+    var user = firebase.auth().currentUser
+    var email = user.email
+    var clientName = user.displayName
+
+    var batch = db.batch()
+    var client = db.collection('Users').doc(email)
+    batch.update(client, {ApptReq: true, appointment:{appointment}})
+    var admin = db.collection('Users').doc('admin@a.com')
+    batch.update(admin, {ApptReq: true, appointment:{appointment, clientName}})   
+    batch.commit().then(function(){
+        console.log('Updated')
+    })    
+}
+
 export function signout(onSignedOut) {
     firebase.auth().signOut()
         .then(() => {
             onSignedOut();
         })
-
 }
 
 export function updateProfile(User, updateComplete) {
