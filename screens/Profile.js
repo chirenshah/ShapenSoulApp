@@ -91,7 +91,7 @@ export default class UserProfile extends React.Component {
 
 const styles = StyleSheet.create({
     container:{
-       padding:20,
+       paddingTop:150,
        backgroundColor:"white",
        height:800
     },
@@ -101,13 +101,12 @@ const styles = StyleSheet.create({
         textAlign:'center'
     },
     input:{
-        borderColor:"black",
-        borderWidth:1,
-        margin:20,
-        backgroundColor:'#e8eeef',
-        width:300,
         alignSelf:'center',
-        
+        width:300,
+        margin:20,
+        height:50,
+        textAlign:"center",
+        backgroundColor:"#e8eeef"
     },
     picker:{
         paddingLeft:100,

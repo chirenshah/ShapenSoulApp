@@ -7,11 +7,13 @@ import {
   Text,
   View,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
+  Keyboard,
+  TouchableWithoutFeedback
 } from 'react-native';
 import { Formik } from 'formik';
 import * as yup from 'yup';
-import {login,subscribeToAuthChanges,loginPhone,signout} from '../components/Fb'
+import {login,subscribeToAuthChanges,signInWithPhoneNumber,signout,confirmCode} from '../components/Fb'
 const validationSchema = yup.object().shape({
   email: yup
     .string()
@@ -32,17 +34,20 @@ const phoneValidation = yup.object().shape({
   .positive("A phone number can't start with a minus")
   .integer("A phone number can't include a decimal point")
   .min(999999999,'Seems a bit Short')
-  .required('A phone number is required')
+  .max(10000000000,'Seems too large')
+  .required('A phone number is required'),
+  //otp:yup.number('Doesnt Seem like a Number').required()
 });
 
 export default class Test extends Component{
 
     state={
         error:"",
-        submit:true,
+        submit:false,
         phone:true,
         button:"SEND OTP",
-        switch:"Login with Email"
+        switch:"Login with Email",
+        confirm:null
     }
 
     componentDidMount(){
@@ -50,15 +55,15 @@ export default class Test extends Component{
     }
 
     authStateChanged=(user) =>{
-        if(user){
-            //this.props.navigation.navigate("Home");
+        if(user){ 
         }
     }
 
     popup = (error) => {
+      console.log(error)
         this.setState({
-            error:error.message
-        })
+           error:error.message
+         })
     }
     switch = ()=>{
       var bool
@@ -72,40 +77,73 @@ export default class Test extends Component{
         }
       this.setState({
       phone:bool,
-      switch:foo
+      switch:foo,
+      error:''
+    })}
+
+    problem = (error) =>{
+      console.log(error)
+      this.setState({
+        error:error.message,
+        button:'Resend Otp'
+       })
+     }
+
+    otp = (confirmation,button) => {
+      this.setState({
+      confirm:confirmation,
+      button:button
     })}
     render(){
         return(
             <SafeAreaView style={{ marginTop: 50 }}>
+              <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                 <View style={styles.logo}>
                     <Text style={{fontSize:50}}>Shape N Soul</Text>
-              </View>
-              {this.state.phone ? (<View>
+                </View>
+              </TouchableWithoutFeedback> 
+              {this.state.phone ? (<TouchableWithoutFeedback onPress={Keyboard.dismiss}><View>
                 <Formik
-                initialValues={{phone:"",otp:""}}
+                initialValues={{phone:"+91",otp:""}}
                 onSubmit={(values, actions) => {
-                  console.log(values)
+                    if(this.state.button !== "Confirm OTP"){
+                      signInWithPhoneNumber('+91'+values.phone,this.otp)
+                      Keyboard.dismiss()
+                      actions.setSubmitting(false)
+                    }
+                    else{
+                      if(values.otp !== '')
+                      confirmCode(values.otp,this.state.confirm,this.problem)
+                      else{
+                        this.setState({
+                        error:'Otp is required'
+                      })
+                    }
+                    actions.setSubmitting(false)
+                    }
                 }}
                 validationSchema={phoneValidation}>
                 {formikProps => (
                   <React.Fragment>
                     <View style={styles.container}>
+                      <Text style={styles.text}>Phone Number</Text>
                       <TextInput
-                        placeholder="Phone Number"
+                        placeholder="ex. 9876543210"
                         style={styles.input}
                         onChangeText={formikProps.handleChange('phone')}
                         onBlur={formikProps.handleBlur('phone')}
-                        keyboardType="numeric"
+                        keyboardType="phone-pad"
                       />
                       <Text style={styles.error}>
-                        {formikProps.touched.phone && formikProps.errors.phone} 
+                        {formikProps.touched.phone && formikProps.errors.phone || this.state.error} 
                       </Text>
-                      {this.state.button == "SEND OTP" ? (null):(<TextInput
+                      {this.state.button !== "Confirm OTP" ? (null):(<TextInput
                         placeholder="OTP"
                         style={styles.otp}
                         onChangeText={formikProps.handleChange('otp')}
                         onBlur={formikProps.handleBlur('otp')}
-                      />)} 
+                        keyboardType="phone-pad"/>
+                        )}
                     {formikProps.isSubmitting ? (
                       <ActivityIndicator />
                     ) : (
@@ -116,7 +154,7 @@ export default class Test extends Component{
                   </React.Fragment>
                 )}
               </Formik>
-              </View>):(<View>
+              </View></TouchableWithoutFeedback>):(<TouchableWithoutFeedback onPress={Keyboard.dismiss}><View>
                 <Formik
                 initialValues={{email:"",password:""}}
                 onSubmit={(values, actions) => {
@@ -127,26 +165,27 @@ export default class Test extends Component{
                   else{
                     actions.setSubmitting(false)
                   }
-                  
+                  Keyboard.dismiss()
                 }}
                 validationSchema={validationSchema}
               >
                 {formikProps => (
                   <React.Fragment>
                     <View style={styles.container}>
-                    <Text style={styles.error}>
+                    <Text style={styles.text}>Email</Text>
+                    {this.state.error ? (<Text style={styles.error}>
                         {this.state.error} 
-                      </Text>
+                      </Text>):(null)}
                       <TextInput
-                        placeholder="Email"
+                        placeholder="ex. john@doe.com"
                         style={styles.input}
                         onChangeText={formikProps.handleChange('email')}
                         onBlur={formikProps.handleBlur('email')}
-                        
                       />
                       <Text style={styles.error}>
-                        {formikProps.touched.email && formikProps.errors.email} 
+                        {formikProps.touched.email && formikProps.errors.email || this.state.error} 
                       </Text>
+                      <Text style={[styles.text,{marginTop:20}]}>Password</Text>
                       <TextInput
                         placeholder="Password"
                         style={styles.input}
@@ -167,9 +206,9 @@ export default class Test extends Component{
                   </React.Fragment>
                 )}
               </Formik>
-              </View>)}
-              <TouchableOpacity style={styles.switch} onPress={this.switch}>
-                    <Text>{this.state.switch}</Text>
+              </View></TouchableWithoutFeedback>)}
+              <TouchableOpacity onPress={this.switch}>
+                    <Text style={styles.switch}>{this.state.switch}</Text>
               </TouchableOpacity>
             </SafeAreaView>
           )
@@ -185,7 +224,6 @@ const styles = StyleSheet.create({
     input:{
         alignSelf:'center',
         width:300,
-        margin:20,
         height:50,
         textAlign:"center",
         backgroundColor:"#e8eeef"
@@ -199,10 +237,11 @@ const styles = StyleSheet.create({
       margin:20
     },
     container:{
-        marginTop:200,
-        margin:40,
+        marginTop:150,
+        margin:20,
+        padding:30,
         borderWidth:1,
-        borderColor:"white"
+        borderColor:"white",
     },
     logo:{
         marginTop:100,
@@ -216,7 +255,12 @@ const styles = StyleSheet.create({
       alignSelf:"center",
       width:300,
       textAlign:"center",
-      marginLeft:200,
-      fontSize:25
+      fontSize:15
+    },
+    text:{
+      alignSelf:"center",
+      textAlign:"center",
+      fontSize:18,
+      marginBottom:15
     }
 })

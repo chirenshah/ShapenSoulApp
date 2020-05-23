@@ -14,13 +14,15 @@ export default function PhoneSignIn() {
   async function confirmCode() {
     try {
       await confirm.confirm(code);
+      console.log('Success')
     } catch (error) {
       console.log('Invalid code.');
     }
   }
   async function signInWithPhoneNumber() {
-    const confirmation = await firebase.auth().signInWithPhoneNumber('+918976305456');
+    const confirmation = await firebase.auth().signInWithPhoneNumber('+918169287917');
     setConfirm(confirmation);
+    console.log(confirmation)
   }
 
   if (!confirm) {

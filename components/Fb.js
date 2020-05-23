@@ -6,10 +6,21 @@ export async function login( email, password , popup ) {
         .catch((error) => popup(error))
 }
 
-async function signInWithPhoneNumber(PhoneNumber) {
-    const confirmation = await firebase.auth().signInWithPhoneNumber(PhoneNumber);
-    setConfirm(confirmation);
+export async function signInWithPhoneNumber(PhoneNumber,otp) {
+    let confirmation = await firebase.auth().signInWithPhoneNumber(PhoneNumber).
+    then((confirmation)=>{
+        otp(confirmation,"Confirm OTP")})
+    .catch((error)=>console.log(error))
   }
+
+export async function confirmCode(code,confirm,problem) {
+    try {
+      success = await confirm.confirm(code);
+        if(success)problem('true')
+    } catch (error) {
+      problem(error)
+    }
+}  
 
 export async function signup(email, password, Name, popup) {
     firebase.auth().createUserWithEmailAndPassword(email, password)
