@@ -14,6 +14,7 @@ export default class UserProfile extends React.Component {
         ApptReq: false,
         ApptConfirm: false,
         BloodG:"",
+        tokenID: "",
     }
     componentDidMount(){
         subscribeToAuthChanges(this.authStateChanged)

@@ -36,23 +36,6 @@ export function subscribeToAuthChanges(authStateChanged) {
     })
 }
 
-// export function reqAppointment(Appointment){
-//     firebase.firestore()
-//         .collection('Users')
-//         .doc('a@abc.com')
-//         .update({
-//             ApptReq: true,
-//             appointment: {Appointment}
-//         })
-//         // .doc('admin@a.com')
-//         // .update({
-//         //     ApptReq: true,
-//         //     appointment: {Appointment}
-//         // })
-//         .then(() => {
-//             console.log('Appointment Requested!')
-//         })
-// }
 
 export function reqAppointment(appointment){
     var db = firebase.firestore()
@@ -61,13 +44,22 @@ export function reqAppointment(appointment){
     var email = user.email
     var clientName = user.displayName
 
+    var tokenID = clientName + appointment
+    var all = []
+    all.push(tokenID)
+    // let entry = new Map()
+    // let name = ''
+    // let date = ''
+    // // entry.set(name, clientName)
+    // entry.set(date, appointment)
+
     var batch = db.batch()
     var client = db.collection('Users').doc(email)
     batch.update(client, {ApptReq: true, appointment:appointment})
     var admin = db.collection('Users').doc('admin@a.com')
-    batch.update(admin, {ApptReq: true, appointment:{appointment, clientName}})   
+    batch.update(admin, {ApptReq: true, appointment:all})   
     batch.commit().then(function(){
-        console.log('Updated')
+        console.log('Updated', all)
     })    
 }
 
