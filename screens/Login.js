@@ -177,7 +177,7 @@ export default class Test extends Component{
                         {this.state.error} 
                       </Text>):(null)}
                       <TextInput
-                        placeholder="ex. john@doe.com"
+                        placeholder="eg. john@doe.com"
                         style={styles.input}
                         onChangeText={formikProps.handleChange('email')}
                         onBlur={formikProps.handleBlur('email')}

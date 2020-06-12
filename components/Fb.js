@@ -36,7 +36,6 @@ export function subscribeToAuthChanges(authStateChanged) {
     })
 }
 
-
 export function reqAppointment(appointment){
     var db = firebase.firestore()
 
@@ -57,11 +56,34 @@ export function reqAppointment(appointment){
     var client = db.collection('Users').doc(email)
     batch.update(client, {ApptReq: true, appointment:appointment})
     var admin = db.collection('Users').doc('admin@a.com')
-    batch.update(admin, {ApptReq: true, appointment:all})   
-    batch.commit().then(function(){
-        console.log('Updated', all)
-    })    
+    batch.update(admin, {appointment:all})   
+    batch.commit().then(() => 
+        {
+            console.log('Updated', all);
+        }
+    )  
+    .catch((error) => console.log(error))
 }
+
+
+export function getInfo(){
+    var all = []
+    
+    firebase.firestore()
+    .collection('Users')
+    .where('ApptReq', '==', true)
+    .get()
+    .then(function(querySnapshot){
+        querySnapshot.forEach(function(doc){  
+            all.push(doc.data().tokenID)  
+            console.log(all)
+        })
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+}
+
 
 export function signout(onSignedOut) {
     firebase.auth().signOut()

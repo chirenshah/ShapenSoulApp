@@ -3,6 +3,7 @@ import { StyleSheet, Button, Text, View, TouchableOpacity, StatusBar } from 'rea
 import {Calendar} from 'react-native-calendars';
 import {reqAppointment}  from '../components/Fb'
  
+
 export default class Calc extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +12,7 @@ export default class Calc extends Component {
     };
     this.onDayPress = this.onDayPress.bind(this);
   }
-  
+
   onDayPress(day) {
     this.setState({
       selected: day.dateString,

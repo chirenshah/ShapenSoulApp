@@ -9,24 +9,19 @@ export default class Admin extends React.Component {
 	  render() {
 	  	
 	    return (   	
-	    <View>
-	    <Text> ADMIN TEST </Text>
-	    <TouchableOpacity
-					onPress = {() => check()}
-					>
-					<Text> Check</Text>
+            <View style = {{flex: 1, }}>
+        	    <View style = {styles.card}>
 
-				</TouchableOpacity>
-		</View>
+        	       <Text> ADMIN TEST </Text>
+        	    
+        		</View>
+            </View>
 		)
 	}}
 
 
 const styles = StyleSheet.create({
-    head:{
-    	fontSize: 25,
-    	padding: 20
-    },
+    
     button:{
     	alignSelf:"center",
         width: 400,
@@ -34,5 +29,12 @@ const styles = StyleSheet.create({
         marginTop:490
 
     },
+    card:{
+        
+        backgroundColor: 'white',
+        height: 100,
+        padding: 15,
+        margin: 30
+    }
    
 })

@@ -18,7 +18,7 @@ export default function Settings({navigation: { navigate }}) {
 				<View>
 
 				<TouchableOpacity
-					onPress = {() =>{ signout(this.onSignedOut);} }
+					onPress = {() =>{signout(this.onSignedOut);} }
 					>
 					<Text> Logout</Text>
 				</TouchableOpacity>

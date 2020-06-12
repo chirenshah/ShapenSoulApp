@@ -86,9 +86,9 @@ export default class UserProfile extends React.Component {
                 }}/>
             </View>
             </View>
-            )
-        }
+        )
     }
+}
 
 const styles = StyleSheet.create({
     container:{
