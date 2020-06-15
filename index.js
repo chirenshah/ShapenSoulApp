@@ -2,10 +2,18 @@
  * @format
  */
 
-import { AppRegistry } from 'react-native';
-//import UserProfile from './screens/Profile.js';
-import App from './App.js';
 import {name as appName} from './app.json';
+import { AppRegistry } from 'react-native';
 
-AppRegistry.registerComponent(appName, () => App);
-//AppRegistry.registerComponent(appName, () => UserProfile);
+
+import AdminHome from './screens/AdminHome.js';
+AppRegistry.registerComponent(appName, () => AdminHome);
+
+
+// import App from './App.js';
+
+// import Appointments from './screens/Appointments'
+// AppRegistry.registerComponent(appName, () => Appointments);
+
+// import Test from './screens/Login'
+// AppRegistry.registerComponent(appName, () => Test);
