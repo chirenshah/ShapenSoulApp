@@ -6,7 +6,7 @@ import {name as appName} from './app.json';
 import { AppRegistry } from 'react-native';
 
 
-import AdminHome from './screens/AdminHome.js';
+import AdminHome from './screens/Home.js';
 AppRegistry.registerComponent(appName, () => AdminHome);
 
 

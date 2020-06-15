@@ -15,9 +15,13 @@ export default class UserProfile extends React.Component {
         ApptConfirm: false,
         BloodG:"",
         tokenID: "",
+        First:true
     }
     componentDidMount(){
         subscribeToAuthChanges(this.authStateChanged)
+        if(this.state.First){
+            this.props.navigation.replace('Home')
+        }
     }
     authStateChanged = (User) =>{
         this.setState({email:User.email})

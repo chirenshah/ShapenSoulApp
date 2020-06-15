@@ -1,20 +1,30 @@
-import React, { useState , Component} from 'react';
-import { Button, TextInput , View, Text } from 'react-native';
+import * as React from 'react';
+import { Text, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
-import LoginScreen from './screens/Login'
-import signup from './screens/Signup'
 
-export default class Home extends Component{
+function HomeScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Home!</Text>
+    </View>
+  );
+}
 
-  render(){
-    return(
-      <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Signup" component={signup} />
-        <Tab.Screen name="Login" component={LoginScreen} />
-      </Tab.Navigator>
-    </NavigationContainer>
-    )
-  }
+function SettingsScreen() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+const Tab = createBottomTabNavigator();
+
+export function MyTabs() {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="Settings" component={SettingsScreen} />
+    </Tab.Navigator>
+  );
 }
