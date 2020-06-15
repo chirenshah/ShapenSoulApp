@@ -1,38 +1,24 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import {createDrawerNavigator} from '@react-navigation/drawer'
-import SignUpScreen from './screens/Signup'
-import AboutScreen from './screens/About'
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import LoginScreen from './screens/Login'
-import Diet from './screens/Diet'
-import User from './screens/UserDb'
-import Appointments from './screens/Appointments'
-import Settings from './screens/Settings'
+import UserProfile from './screens/Profile'
+import Home from './screens/Home'
 
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
 export default class App extends React.Component {
-  home = () => {
-    return(
-      <Drawer.Navigator>
-          <Drawer.Screen name="Diet generator" component={Diet} />
-          <Drawer.Screen name="User" component={User}/> 
-          <Drawer.Screen name="Appointments" component={Appointments}/> 
-          <Drawer.Screen name="Settings" component={Settings}/>
-      </Drawer.Navigator>
-    )}
-
   render(){
     return (
       <NavigationContainer>
-        <Stack.Navigator headerMode= 'screen'>
+        <Stack.Navigator screenOptions={{
+    headerShown: false}}>
           <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
-          <Stack.Screen name="Signup" component={SignUpScreen} options={{ title: 'Sign Up' }}/>
-          <Stack.Screen name="Home" children={this.home} options= {{ headerShown: false }}/>
+          <Stack.Screen name="Profile" component={UserProfile} options={{ title: 'Profile'}} />
+          <Stack.Screen name="Home" component={Home} options={{ title: 'Home'}} />
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -14,6 +14,7 @@ import {
 import { Formik } from 'formik';
 import * as yup from 'yup';
 import {login,subscribeToAuthChanges,signInWithPhoneNumber,signout,confirmCode} from '../components/Fb'
+
 const validationSchema = yup.object().shape({
   email: yup
     .string()
@@ -39,7 +40,7 @@ const phoneValidation = yup.object().shape({
   //otp:yup.number('Doesnt Seem like a Number').required()
 });
 
-export default class Test extends Component{
+export default class LoginScreen extends Component{
 
     state={
         error:"",
@@ -55,7 +56,8 @@ export default class Test extends Component{
     }
 
     authStateChanged=(user) =>{
-        if(user){ 
+        if(user){
+          this.props.navigation.replace('Profile')
         }
     }
 

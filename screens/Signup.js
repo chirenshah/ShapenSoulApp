@@ -28,7 +28,7 @@ const validationSchema = yup.object().shape({
 password2: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match')
 }); 
 
-export default class Test extends Component{
+export default class signup extends Component{
 
     state={
         error:"",

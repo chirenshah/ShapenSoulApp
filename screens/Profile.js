@@ -14,15 +14,22 @@ export default class UserProfile extends React.Component {
         ApptReq: false,
         ApptConfirm: false,
         BloodG:"",
+        First:true
     }
     componentDidMount(){
         subscribeToAuthChanges(this.authStateChanged)
+        if(this.state.First){
+            this.props.navigation.replace('Home')
+        }
     }
     authStateChanged = (User) =>{
         this.setState({email:User.email})
     }
 
     updateComplete = (User)  =>{
+        this.setState({
+            first:true
+        })
         console.log(User);
     } 
     update = () => {
@@ -35,7 +42,6 @@ export default class UserProfile extends React.Component {
             appointment:this.state.appointment,
             ApptConfirm:this.state.ApptConfirm,
             ApptReq:this.state.ApptReq,
-
         }
         updateProfile(User,this.updateComplete)
     }  
