@@ -5,25 +5,24 @@ import {LoginScreen} from './Login'
 //import {UserProfile} from './Profile'
 //import { useNavigation } from '@react-navigation/native';
 
-const screens ={
-	Login: {LoginScreen},
-	// UserProfile: {UserProfile}
-}
-
-export default function Settings({navigation: { navigate }}) {
+export default class Settings extends Component
+{
 	onSignedOut = () =>{
-		navigate('Login')
+		this.props.navigation.navigate('Login')
 	}
-			return (   	
-				<View>
+	render(){
+		return (   	
+			<View>
 
-				<TouchableOpacity
-					onPress = {() =>{signout(this.onSignedOut);} }
-					>
-					<Text> Logout</Text>
-				</TouchableOpacity>
+			<TouchableOpacity
+				onPress = {() =>{signout(this.onSignedOut);} }
+				>
+				<Text> Logout</Text>
+			</TouchableOpacity>
 
-			</View>
+		</View>
 		)
 	}
+	}
+			
 

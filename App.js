@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import LoginScreen from './screens/Login'
 import UserProfile from './screens/Profile'
+import Setting from './screens/Settings'
 import Home from './screens/Home'
 
 
@@ -19,6 +20,7 @@ export default class App extends React.Component {
           <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
           <Stack.Screen name="Profile" component={UserProfile} options={{ title: 'Profile'}} />
           <Stack.Screen name="Home" component={Home} options={{ title: 'Home'}} />
+          <Stack.Screen name="Setting" component={Setting} options={{ title: 'Setting' }} />
         </Stack.Navigator>
       </NavigationContainer>
     );

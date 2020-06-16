@@ -56,6 +56,7 @@ export default class LoginScreen extends Component{
     }
 
     authStateChanged=(user) =>{
+      console.log(user)
         if(user){
           this.props.navigation.replace('Profile')
         }
