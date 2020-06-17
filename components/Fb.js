@@ -1,6 +1,7 @@
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
+import database from '@react-native-firebase/database'
 import uuid4 from 'uuid/v4';
 
 export async function login( email, password , popup ) {
@@ -219,4 +220,36 @@ export function addUser(User, addComplete) {
             snapshot.set(User);
         }).then(() => addComplete(User))
         .catch((error) => console.log(error));
+}
+parse = snapshot => {
+    const { timestamp: numberStamp, text, user } = snapshot.val();
+    const { key: _id } = snapshot;
+    const timestamp = new Date(numberStamp);
+    const message = {
+      _id,
+      timestamp,
+      text,
+      user,
+    };
+    return message;
+  };
+
+export function on (callback){
+    database().ref('messages').limitToLast(20).on('child_added', snapshot => callback(this.parse(snapshot)));
+}
+
+export function send (messages){
+    for (let i = 0; i < messages.length; i++) {
+      const { text, user } = messages[i];
+      const message = {
+        text,
+        user,
+        timestamp: this.timestamp,
+      };
+      database().ref('messages').push(message);
+    }
+};
+
+export function off(){
+    database().ref('messages').off();
 }

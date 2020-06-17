@@ -1,42 +1,39 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
+import { on , off , send } from '../components/Fb'
 
-class Example extends React.Component {
+export default class Example extends React.Component {
   state = {
     messages: [],
   }
 
-  componentDidMount() {
-    this.setState({
-      messages: [
-        {
-          _id: 1,
-          text: 'Hello developer',
-          createdAt: new Date(),
-          user: {
-            _id: 2,
-            name: 'React Native',
-            avatar: 'https://placeimg.com/140/140/any',
-          },
-        },
-      ],
-    })
+  getuser = () => {
+    var user = auth().currentUser
+    console.log(user)
+    return {
+      name:user.displayName,
+      _id: user.uid
+    }
   }
 
-  onSend(messages = []) {
+  componentDidMount() {
+    on(message =>
     this.setState(previousState => ({
-      messages: GiftedChat.append(previousState.messages, messages),
-    }))
+      messages: GiftedChat.append(previousState.messages, message),
+    })))
   }
+
+  componentWillUnmount(){
+    off();
+  }
+
 
   render() {
     return (
       <GiftedChat
         messages={this.state.messages}
-        onSend={messages => this.onSend(messages)}
-        user={{
-          _id: 1,
-        }}
+        onSend={send}
+        user={this.user}
       />
     )
   }

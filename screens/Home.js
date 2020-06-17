@@ -11,12 +11,10 @@ const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
   return (
-    <NavigationContainer>
     <Tab.Navigator>
       <Tab.Screen name="Appointment" component={Appointment} />
       <Tab.Screen name="Chat" component={chat} />
       <Tab.Screen name="Settings" component={Setting} />
     </Tab.Navigator>
-    </NavigationContainer>
   );
 }
