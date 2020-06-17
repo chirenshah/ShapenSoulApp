@@ -1,7 +1,6 @@
 import React from 'react'
 import { View,Button, Text, TextInput , StyleSheet , Picker } from 'react-native'
 import { subscribeToAuthChanges,updateProfile } from '../components/Fb'
-import firebase from 'react-native-firebase'
 
 export default class UserProfile extends React.Component {
     state = {

@@ -1,13 +1,15 @@
-import firebase from 'react-native-firebase';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import storage from '@react-native-firebase/storage';
 import uuid4 from 'uuid/v4';
 
 export async function login( email, password , popup ) {
-    firebase.auth().signInWithEmailAndPassword(email, password)
+    auth().signInWithEmailAndPassword(email, password)
         .catch((error) => popup(error))
 }
 
 export async function signInWithPhoneNumber(PhoneNumber,otp) {
-    let confirmation = await firebase.auth().signInWithPhoneNumber(PhoneNumber).
+    let confirmation = await auth().signInWithPhoneNumber(PhoneNumber).
     then((confirmation)=>{
         otp(confirmation,"Confirm OTP")})
     .catch((error)=>console.log(error))
@@ -23,7 +25,7 @@ export async function confirmCode(code,confirm,problem) {
 }  
 
 export async function signup(email, password, Name, popup) {
-    firebase.auth().createUserWithEmailAndPassword(email, password)
+    auth().createUserWithEmailAndPassword(email, password)
     .then((userInfo) => {
             userInfo.user.updateProfile({ displayName: Name })
         })
@@ -31,15 +33,15 @@ export async function signup(email, password, Name, popup) {
 }
 
 export function subscribeToAuthChanges(authStateChanged) {
-    firebase.auth().onAuthStateChanged((user) => {
+    auth().onAuthStateChanged((user) => {
         authStateChanged(user);
     })
 }
 
 export function reqAppointment(appointment){
-    var db = firebase.firestore()
+    var db = firestore()
 
-    var user = firebase.auth().currentUser
+    var user = auth().currentUser
     var email = user.email
     var clientName = user.displayName
 
@@ -69,7 +71,7 @@ export function reqAppointment(appointment){
 export function getInfo(){
     var all = []
     
-    firebase.firestore()
+    firestore()
     .collection('Users')
     .where('ApptReq', '==', true)
     .get()
@@ -86,17 +88,17 @@ export function getInfo(){
 
 
 export function signout(onSignedOut) {
-    firebase.auth().signOut()
+    auth().signOut()
         .then(() => {
             onSignedOut();
         })
 }
 
 export function updateProfile(User, updateComplete) {
-    User.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+    User.updatedAt = firestore.FieldValue.serverTimestamp();
     console.log(User);
 
-    firebase.firestore()
+    firestore()
         .collection('Users')
         .doc(User.email).set(User)
         .then(() => updateComplete(User))
@@ -106,7 +108,7 @@ export function updateProfile(User, updateComplete) {
 export function deleteFood(food, deleteComplete) {
     console.log(food);
 
-    firebase.firestore()
+    firestore()
         .collection('Foods')
         .doc(food.id).delete()
         .then(() => deleteComplete())
@@ -117,7 +119,7 @@ export async function getUsers(UsersRetreived) {
 
     var userList = [];
 
-    var snapshot = await firebase.firestore()
+    var snapshot = await firestore()
         .collection('Users')
         .get()
 
@@ -132,7 +134,7 @@ export async function getRecipe(RecipeList) {
 
     var foodList = [];
 
-    var snapshot = await firebase.firestore()
+    var snapshot = await firestore()
         .collection('Recipe')
         .get()
 
@@ -156,16 +158,16 @@ export function uploadFood(food, onFoodUploaded, { updating }) {
         const fileName = `${uuid}.${fileExtension}`;
         console.log(fileName);
 
-        var storageRef = firebase.storage().ref(`foods/images/${fileName}`);
+        var storageRef = storage().ref(`foods/images/${fileName}`);
 
         storageRef.putFile(food.imageUri)
             .on(
-                firebase.storage.TaskEvent.STATE_CHANGED,
+                storage.TaskEvent.STATE_CHANGED,
                 snapshot => {
                     console.log("snapshot: " + snapshot.state);
                     console.log("progress: " + (snapshot.bytesTransferred / snapshot.totalBytes) * 100);
 
-                    if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+                    if (snapshot.state === storage.TaskState.SUCCESS) {
                         console.log("Success");
                     }
                 },
@@ -209,7 +211,7 @@ export function uploadFood(food, onFoodUploaded, { updating }) {
 
 export function addUser(User, addComplete) {
 
-    firebase.firestore()
+    firestore()
         .collection('Users')
         .add(User)
         .then((snapshot) => {
