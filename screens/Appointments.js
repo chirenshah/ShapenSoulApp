@@ -30,7 +30,7 @@ export default class Appointments extends React.Component {
 	}
 
 	authStateChanged = (user) => {
-		console.log(user)
+		//console.log(user)
 	}
 
 	  render() {

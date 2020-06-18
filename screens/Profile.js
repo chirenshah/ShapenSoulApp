@@ -27,7 +27,7 @@ export default class UserProfile extends React.Component {
     }
 
     updateComplete = (User)  =>{
-        console.log(User);
+        //console.log(User);
     } 
     update = () => {
         const User = {

@@ -222,9 +222,10 @@ export function addUser(User, addComplete) {
         .catch((error) => console.log(error));
 }
 parse = snapshot => {
-    const { timestamp: numberStamp, text, user } = snapshot.val();
+    const {timestamp: numberStamp, text, user } = snapshot.val();
     const { key: _id } = snapshot;
     const timestamp = new Date(numberStamp);
+    console.log(timestamp)
     const message = {
       _id,
       timestamp,
@@ -235,10 +236,10 @@ parse = snapshot => {
   };
 
 export function on (callback){
-    database().ref('messages').limitToLast(20).on('child_added', snapshot => callback(this.parse(snapshot)));
+    database().ref('messages').limitToLast(20).on('child_added', snapshot => callback(parse(snapshot)));
 }
 
-export function send (messages){
+export function send (messages , uid){
     for (let i = 0; i < messages.length; i++) {
       const { text, user } = messages[i];
       const message = {
@@ -246,7 +247,7 @@ export function send (messages){
         user,
         timestamp: this.timestamp,
       };
-      database().ref('messages').push(message);
+      database().ref('messages/').push(message);
     }
 };
 

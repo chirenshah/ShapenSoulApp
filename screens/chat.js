@@ -1,39 +1,48 @@
 import React from 'react'
 import { GiftedChat } from 'react-native-gifted-chat'
-import { on , off , send } from '../components/Fb'
+import Fire from '../components/chatfb'
+import auth from '@react-native-firebase/auth'
 
 export default class Example extends React.Component {
   state = {
     messages: [],
+    name:'',
+    _id:''
   }
 
   getuser = () => {
     var user = auth().currentUser
-    console.log(user)
-    return {
-      name:user.displayName,
-      _id: user.uid
-    }
+    this.setState({
+      name:user.name,
+      _id:user.uid
+    })
+    console.log("hi" + this.state.name)
   }
 
   componentDidMount() {
-    on(message =>
+    Fire.shared.on(message =>{
     this.setState(previousState => ({
       messages: GiftedChat.append(previousState.messages, message),
-    })))
+    })
+    )})
+    this.getuser()
   }
 
   componentWillUnmount(){
-    off();
-  }
+    Fire.shared.off();
+   }
 
 
   render() {
     return (
       <GiftedChat
         messages={this.state.messages}
-        onSend={send}
-        user={this.user}
+        onSend={Fire.shared.send}
+        user= {{
+        name:this.state.name,
+        _id:this.state._id,
+      }
+    }
       />
     )
   }
