@@ -3,6 +3,7 @@ import { GiftedChat } from 'react-native-gifted-chat'
 import Fire from '../components/chatfb'
 import auth from '@react-native-firebase/auth'
 
+
 export default class Example extends React.Component {
   state = {
     messages: [],
@@ -16,7 +17,7 @@ export default class Example extends React.Component {
       name:user.name,
       _id:user.uid
     })
-    console.log("hi" + this.state.name)
+    //console.log("hi" + this.state.name)
   }
 
   componentDidMount() {

@@ -4,16 +4,22 @@
 
 import {name as appName} from './app.json';
 import { AppRegistry } from 'react-native';
+import BackgroundJob from 'react-native-background-job'
 
-
-import AdminHome from './App.js';
+import AdminHome from './screens/test.js';
 AppRegistry.registerComponent(appName, () => AdminHome);
 
-
-// import App from './App.js';
-
-// import Appointments from './screens/Appointments'
-// AppRegistry.registerComponent(appName, () => Appointments);
-
-// import Test from './screens/Login'
-// AppRegistry.registerComponent(appName, () => Test);
+const backgroundJob = {
+    jobKey: "myJob",
+    job: () => console.log("Running in background")
+   };
+   
+   BackgroundJob.register(backgroundJob);
+   
+   var backgroundSchedule = {
+    jobKey: "myJob",
+   }
+   
+BackgroundJob.schedule(backgroundSchedule)
+    .then(() => console.log("Success"))
+    .catch(err => console.err(err));
