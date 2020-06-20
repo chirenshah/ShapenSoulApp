@@ -6,6 +6,7 @@ import LoginScreen from './screens/Login'
 import UserProfile from './screens/Profile'
 import Setting from './screens/Settings'
 import Home from './screens/Home'
+import Signup from './screens/Signup'
 
 
 const Stack = createStackNavigator();
@@ -18,6 +19,7 @@ export default class App extends React.Component {
         <Stack.Navigator screenOptions={{
     headerShown: false}}>
           <Stack.Screen name="Login" component={LoginScreen} options={{ title: 'Login' }} />
+          <Stack.Screen name="Signup" component={Signup} options={{ title: 'Signup' }} />
           <Stack.Screen name="Profile" component={UserProfile} options={{ title: 'Profile'}} />
           <Stack.Screen name="Home" component={Home} options={{ title: 'Home'}} />
           <Stack.Screen name="Setting" component={Setting} options={{ title: 'Setting' }} />

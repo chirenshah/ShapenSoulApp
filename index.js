@@ -6,7 +6,7 @@ import {name as appName} from './app.json';
 import { AppRegistry } from 'react-native';
 import BackgroundJob from 'react-native-background-job'
 
-import AdminHome from './screens/test.js';
+import AdminHome from './App.js';
 AppRegistry.registerComponent(appName, () => AdminHome);
 
 const backgroundJob = {

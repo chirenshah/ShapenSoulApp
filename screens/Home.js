@@ -1,7 +1,5 @@
-import * as React from 'react';
-import { Text, View } from 'react-native';
+import React , {useEffect}from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
 import Appointment from './Appointments'
 import Setting from './Settings'
 import chat from './chat'
@@ -13,14 +11,27 @@ import PushNotification from 'react-native-push-notification'
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
-  var user = auth().currentUser
-  const intervalId = BackgroundTimer.setInterval(() => {
+  PushNotification.configure({
+    onNotification: function (notification) {
+      console.log("NOTIFICATION:", notification);
+  }});
+  var Currentuser = auth().currentUser
+  useEffect(()=>{
+    console.log('1')
     const subscriber = database()
-      .ref('messages/' + user.uid).on('child_added', snapshot => {
-        
-      });
-      return () => subscriber()
-}, 10200);
+      .ref('messages/' + Currentuser.uid).limitToLast(1).on('child_added', snapshot => {
+        console.log('2')
+        const { text , user } = snapshot.val()
+        console.log(snapshot)
+        if(user._id == Currentuser.uid)
+          PushNotification.localNotification({
+            title:'Shape n soul',
+            message:text
+          })
+      })
+      return () => subscriber();
+  } )
+
   return (
     <Tab.Navigator>
       <Tab.Screen name="Appointment" component={Appointment} />
@@ -29,3 +40,4 @@ export default function MyTabs() {
     </Tab.Navigator>
   );
 }
+
