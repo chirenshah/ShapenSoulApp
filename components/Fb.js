@@ -39,15 +39,17 @@ export function subscribeToAuthChanges(authStateChanged) {
     })
 }
 
+let all = []
+
 export function reqAppointment(appointment){
     var db = firestore()
 
     var user = auth().currentUser
     var email = user.email
     var clientName = user.displayName
-
+    // var all = []
     var tokenID = clientName + appointment
-    var all = []
+    
     all.push(tokenID)
     // let entry = new Map()
     // let name = ''
@@ -56,10 +58,13 @@ export function reqAppointment(appointment){
     // entry.set(date, appointment)
 
     var batch = db.batch()
+
     var client = db.collection('Users').doc(email)
-    batch.update(client, {ApptReq: true, appointment:appointment})
+    batch.update(client, {ApptReq: true, appointment:appointment, tokenID:tokenID})
+
     var admin = db.collection('Users').doc('admin@a.com')
     batch.update(admin, {appointment:all})   
+
     batch.commit().then(() => 
         {
             console.log('Updated', all);
@@ -69,8 +74,9 @@ export function reqAppointment(appointment){
 }
 
 
-export function getInfo(){
-    var all = []
+export function getInfo(handlePress){
+    
+    let all = []
     
     firestore()
     .collection('Users')
@@ -79,12 +85,14 @@ export function getInfo(){
     .then(function(querySnapshot){
         querySnapshot.forEach(function(doc){  
             all.push(doc.data().tokenID)  
-            console.log(all)
+            console.log("getInfo: ", all)
+            handlePress(all)    
         })
     })
     .catch(function(error) {
         console.log("Error getting documents: ", error);
     });
+    
 }
 
 
