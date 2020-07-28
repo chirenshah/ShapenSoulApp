@@ -17,11 +17,10 @@ export default class AdminHome extends React.Component{
 		var stateCopy = Object.assign({}, this.state);
 		stateCopy.requests = all
 		this.setState(stateCopy)
-		console.log("AdminHome", this.state.requests);
+		console.log("AdminHome:", this.state.requests);
 	}
 
     render() {
-  
 	    return (   	
             <View >
         	    <View >

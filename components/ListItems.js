@@ -1,17 +1,16 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Button } from "react-native";
 import PropTypes from 'prop-types';
-// import {ApptBook} from './Fb.js'
+import {ApptBook} from './Fb.js'
 
 function ListItems(props){ 
     return (  
-        
     	<View style = {styles.list} >
     		<Text style = {styles.text}>{props.items}</Text>
             <View style = {styles.buttons}>
                 <TouchableOpacity
                     style = {styles.acceptButton}
-                    onPress = {()=>  console.log("ListItems: Booked!")}
+                    onPress = {()=>  ApptBook(props.items)}
                     >
                     <Text style = {styles.buttonText}>BOOK</Text>
                 </TouchableOpacity>

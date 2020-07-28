@@ -83,10 +83,20 @@ export function getInfo(handlePress){
             console.log("getInfo: ", all)
             handlePress(all)    
         })
+    })    
+}
+
+export function ApptBook(tokenID){
+    var db = firestore()
+    const reqs = db.collection("Users")
+    reqs.where('tokenID', 'in', tokenID)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            reqs.doc(doc.id).update({'ApptConfirm': true})
+            console.log("Appt Booked:", doc.data().name)
+        });
     })
-    .catch(function(error) {
-        console.log("Error getting documents: ", error);
-    });
     
 }
 

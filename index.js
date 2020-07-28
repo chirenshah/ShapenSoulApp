@@ -8,7 +8,7 @@ import BackgroundJob from 'react-native-background-job'
 import AdminHome from './screens/AdminHome.js';
 import App from './App.js'
 
-AppRegistry.registerComponent(appName, () => AdminHome);
+AppRegistry.registerComponent(appName, () => App);
 
 const backgroundJob = {
     jobKey: "myJob",
