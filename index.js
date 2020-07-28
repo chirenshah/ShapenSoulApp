@@ -5,10 +5,10 @@
 import {name as appName} from './app.json';
 import { AppRegistry } from 'react-native';
 import BackgroundJob from 'react-native-background-job'
-// import AdminHome from './screens/AdminHome.js';
+import AdminHome from './screens/AdminHome.js';
 import App from './App.js'
 
-AppRegistry.registerComponent(appName, () => App);
+AppRegistry.registerComponent(appName, () => AdminHome);
 
 const backgroundJob = {
     jobKey: "myJob",

@@ -3,6 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import storage from '@react-native-firebase/storage';
 import database from '@react-native-firebase/database'
 import uuid4 from 'uuid/v4';
+import moment from 'moment'
 
 export async function login( email, password , popup ) {
     auth().signInWithEmailAndPassword(email, password)
@@ -42,20 +43,14 @@ export function subscribeToAuthChanges(authStateChanged) {
 let all = []
 
 export function reqAppointment(appointment){
+    var appointment = moment(appointment).format("D MMM YYYY")
     var db = firestore()
-
     var user = auth().currentUser
     var email = user.email
     var clientName = user.displayName
     // var all = []
-    var tokenID = clientName + appointment
-    
+    var tokenID = clientName + ' ' + appointment
     all.push(tokenID)
-    // let entry = new Map()
-    // let name = ''
-    // let date = ''
-    // // entry.set(name, clientName)
-    // entry.set(date, appointment)
 
     var batch = db.batch()
 

@@ -29,7 +29,6 @@ export default class Calc extends Component {
 
   render() {
     const { selectedDate } = this.state
-    //const DateString = selectedDate ? selectedDate.toString() : '';
     return ( 
       <View style={styles.container}>
 	      <StatusBar barStyle="light-content"/>
